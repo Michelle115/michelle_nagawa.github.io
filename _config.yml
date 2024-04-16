@@ -1,44 +1,19 @@
 # Site wide configuration
 
-title: Academic Website of Ted Laderas
+title: Welcome to my e-portfolio
 locale: en_US
 logo: # filename of a logo image that has been placed into your images directory
 
 # Enter the following platform usernames if you would like for them to appear on your site.
 owner:
-  name: Ted Laderas
+  name: Michelle Nagawa
   avatar: bio-photo.jpg
-  bio: "This is a sample Jekyll academic website."
-  email: laderast@ohsu.edu
+  bio: "GIS Professional with 4 years of practical experience. Highly experiencedin geospatial data collection and analysis through tecniques such as Remote Sensing, GIS Surveys, Kobo Collect for socio-economic work. Highly qualified in Data Quality Assessment, Data Management, Monitoring & Evaluation, Data analysis & visulaization which are very core elements of my work as a GIS Practitioner."
+  email: nagzmichy@gmail.com
   # Do not include the @ symbol in your Twitter username
-  twitter: laderast
-  linkedin: #username
-  github: laderast
-  orcid: # ID Number (ex. 0000-0000-0000-0000)
-  researchgate: #username
-  mendeley: #username
-  google:
-    plus: #username
-    analytics:
-    verify:
-    scholar: #id
-  facebook: #username
-  instagram: #username
-  bing-verify:
-  stackoverflow: #123456/username from a "https://stackoverflow.com/users/123456/username" link
-  xing: #username
-  lastfm: #username
-  tumblr: #username
-  pinterest: #username
-  foursquare: #username
-  steam: #username
-  dribbble: #username
-  youtube: #username
-  soundcloud: #username
-  weibo: #username
-  flickr: #username
-  codepen: #username
-  disqus-shortname:
+  twitter: MichyN123
+  linkedin: Michelle Nagawa
+  github: Michelle115
 
 # The following adjust the accents for your site. If you would like to further edit colors, fonts, font sizes, etc.
 # you may do so in _sass/variables.scss
