@@ -96,6 +96,32 @@
   .divider { height: 5px; background: repeating-linear-gradient(-45deg, var(--primary) 0 9px, var(--accent) 9px 18px, var(--secondary) 18px 27px); }
 
   .scenario { padding-block: 2rem 4rem; }
+
+  /* ---- chronological flow steps ---- */
+  .flow-steps { display: flex; gap: .5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .flow-step { display: flex; align-items: center; gap: .5rem; font-size: .76rem; font-weight: 700; color: var(--ink-soft); padding: .4rem .8rem; border-radius: 999px; background: var(--surface-2); }
+  .flow-step .flow-num { width: 1.4rem; height: 1.4rem; border-radius: 50%; background: var(--line); color: var(--ink-soft); display: flex; align-items: center; justify-content: center; font-size: .68rem; flex-shrink: 0; }
+  .flow-step.done { color: var(--secondary-strong); background: var(--secondary-tint); }
+  .flow-step.done .flow-num { background: var(--secondary); color: #fff; }
+  .flow-step.active { color: var(--primary-strong); background: var(--primary-tint); }
+  .flow-step.active .flow-num { background: var(--primary); color: #fff; }
+
+  /* ---- auth form (sign up) ---- */
+  .auth-shell { display: flex; justify-content: center; }
+  .auth-card { width: 100%; max-width: 440px; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 2rem; box-shadow: var(--shadow-md); }
+  .auth-card h2 { text-align: center; font-size: 1.4rem; }
+  .checkbox-row { display: flex; align-items: flex-start; gap: .5rem; margin-bottom: 1.1rem; }
+  .checkbox-row input { margin-top: 3px; }
+  .checkbox-row label { font-size: .78rem; color: var(--ink-soft); }
+  .auth-foot { text-align: center; font-size: .82rem; color: var(--ink-soft); margin-top: 1.2rem; }
+
+  /* ---- file upload ---- */
+  .file-drop { border: 1.5px dashed var(--line); border-radius: 10px; padding: .9rem; text-align: center; cursor: pointer; background: var(--paper); }
+  .file-drop:hover { border-color: var(--primary); }
+  .file-drop input[type="file"] { display: none; }
+  .file-drop-label { font-size: .78rem; color: var(--ink-soft); }
+  .file-preview { display: flex; align-items: center; gap: .6rem; margin-top: .6rem; padding: .5rem .7rem; border-radius: 8px; background: var(--secondary-tint); font-size: .76rem; color: var(--secondary-strong); }
+  .file-thumb { width: 32px; height: 32px; border-radius: 6px; object-fit: cover; flex-shrink: 0; background: var(--surface-2); }
   .eyebrow { font-weight: 800; text-transform: uppercase; letter-spacing: .09em; font-size: .68rem; color: var(--primary-strong); }
   .lede { font-size: 1.02rem; color: var(--ink-soft); max-width: 56ch; }
   .scenario-head { margin-bottom: 1.75rem; }
@@ -250,7 +276,13 @@
     <div class="scenario-head">
       <span class="eyebrow">First run</span>
       <h1 style="font-size:1.8rem;">Choosing a path into Kitabo Circles</h1>
-      <p class="lede">Every new reader starts here. The four options map to the app's four real jobs — the fifth path, for schools, breaks off into its own product.</p>
+      <p class="lede">Every new reader starts here. Pick a path, then sign up — this whole page walks in the same chronological order a real signup would: Get Started → Sign Up → Set Up → Your Space.</p>
+    </div>
+    <div class="flow-steps">
+      <span class="flow-step active" id="flow-1"><span class="flow-num">1</span>Get Started</span>
+      <span class="flow-step" id="flow-2"><span class="flow-num">2</span>Sign Up</span>
+      <span class="flow-step" id="flow-3"><span class="flow-num">3</span>Set Up</span>
+      <span class="flow-step" id="flow-4"><span class="flow-num">4</span>Your Space</span>
     </div>
     <div class="phone-shell">
       <div class="phone-screen">
@@ -260,19 +292,19 @@
         <div class="phone-body">
           <p class="lede" style="text-align:center; margin:0 auto 1.2rem; font-size:.88rem;">Reading together, writing our own story. What brings you here today?</p>
 
-          <button class="opt-card" onclick="jump('leader','leader','overview')">
+          <button class="opt-card" onclick="choosePath('start-club')">
             <span class="opt-icon" style="background:var(--primary-tint);"></span>
             <span><h4>Start a Book Club</h4><p>Create a circle, invite readers, pick the first book.</p></span>
           </button>
-          <button class="opt-card" onclick="jump('member','member','invite')">
+          <button class="opt-card" onclick="choosePath('join-club')">
             <span class="opt-icon" style="background:var(--lake-tint);"></span>
             <span><h4>Join a Book Club</h4><p>Have a link or code from a leader? Land right on their circle.</p></span>
           </button>
-          <button class="opt-card" onclick="jump('reader','reader','myreading')">
+          <button class="opt-card" onclick="choosePath('track-reading')">
             <span class="opt-icon" style="background:var(--secondary-tint);"></span>
             <span><h4>Track My Reading</h4><p>Reading solo? Log books and keep your own streak.</p></span>
           </button>
-          <button class="opt-card" onclick="jump('reader','reader','discover')">
+          <button class="opt-card" onclick="choosePath('discover')">
             <span class="opt-icon" style="background:var(--accent-tint);"></span>
             <span><h4>Discover Books</h4><p>Browse curated Ugandan and East African reads.</p></span>
           </button>
@@ -280,10 +312,54 @@
           <div style="text-align:center; margin-top:1.3rem; padding-top:1rem; border-top:1px solid var(--line);">
             <p style="font-size:.78rem; color:var(--ink-soft); margin-bottom:.5rem;">Reading with a school?</p>
             <div class="btn-row" style="justify-content:center;">
-              <button class="btn btn-outline btn-sm" onclick="jump('school','school','overview')">I'm the school admin</button>
-              <button class="btn btn-outline btn-sm" onclick="jump('kidstudent','kidstudent','home')">I'm a student</button>
+              <button class="btn btn-outline btn-sm" onclick="choosePath('school-admin')">I'm the school admin</button>
+              <button class="btn btn-outline btn-sm" onclick="choosePath('student')">I'm a student</button>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= SIGN UP ======================= -->
+<section class="scenario" id="sc-signup" hidden>
+  <div class="wrap">
+    <div class="scenario-head">
+      <span class="eyebrow">Step 2</span>
+      <h1 style="font-size:1.8rem;">Creating the account</h1>
+      <p class="lede">One form, adapted to whichever path you picked — the extra field below changes with it.</p>
+    </div>
+    <div class="flow-steps">
+      <span class="flow-step done" id="flow2-1"><span class="flow-num">✓</span>Get Started</span>
+      <span class="flow-step active" id="flow2-2"><span class="flow-num">2</span>Sign Up</span>
+      <span class="flow-step" id="flow2-3"><span class="flow-num">3</span>Set Up</span>
+      <span class="flow-step" id="flow2-4"><span class="flow-num">4</span>Your Space</span>
+    </div>
+
+    <div class="auth-shell">
+      <div class="auth-card">
+        <div id="signup-form-state">
+          <p class="eyebrow" style="text-align:center; display:block;" id="su-eyebrow">Almost there</p>
+          <h2 id="su-title">Create your account</h2>
+          <p class="lede" style="text-align:center; margin:0 auto 1.4rem; max-width:34ch; font-size:.88rem;" id="su-subtitle">Just a few details, then you're straight in.</p>
+          <form id="su-form">
+            <div class="field"><label>Full name</label><input id="su-name" type="text" placeholder="e.g. Achen Nabirye" required></div>
+            <div class="field"><label>Email</label><input id="su-email" type="email" placeholder="you@example.com" required></div>
+            <div class="field"><label>Phone number</label><input id="su-phone" type="tel" placeholder="07XX XXX XXX"></div>
+            <div class="field" id="su-extra-field" hidden><label id="su-extra-label">Extra field</label><input id="su-extra" type="text"></div>
+            <div class="field"><label>Password</label><input id="su-password" type="password" placeholder="At least 8 characters" required></div>
+            <div class="checkbox-row"><input type="checkbox" id="su-terms" required><label for="su-terms">I agree to the Kitabo Circles Terms and Privacy Policy.</label></div>
+            <button type="submit" class="btn btn-primary btn-block" id="su-submit">Create account</button>
+          </form>
+          <p class="auth-foot">Already reading with us? <a href="login.html">Log in</a></p>
+        </div>
+        <div id="signup-success-state" hidden style="text-align:center;">
+          <span class="brand-mark" style="display:block; margin:0 auto 1rem; width:44px; height:44px;"></span>
+          <p class="eyebrow">You're in</p>
+          <h2 id="ss-title">Welcome!</h2>
+          <p class="lede" style="margin:0 auto 1.4rem; max-width:34ch; font-size:.88rem;" id="ss-body">Your account has been created.</p>
+          <button class="btn btn-primary btn-block" id="ss-continue">Continue</button>
         </div>
       </div>
     </div>
@@ -361,7 +437,7 @@
           <!-- Clubs -->
           <div class="pane" data-scope="reader" data-pane="clubs" hidden>
             <div class="btn-row" style="margin-bottom:1rem;">
-              <button class="btn btn-primary btn-sm" onclick="jump('leader','leader','overview')">+ Start a club</button>
+              <button class="btn btn-primary btn-sm" onclick="jump('leader','leader','create')">+ Start a club</button>
               <button class="btn btn-outline btn-sm" onclick="jump('member','member','invite')">Join with a code</button>
             </div>
             <button class="opt-card" onclick="jump('leader','leader','overview')">
@@ -525,8 +601,9 @@
     </div>
     <div class="dash">
       <div class="dash-side">
-        <div class="org">Kampala Sunrise Readers</div>
+        <div class="org" id="leader-org-name">Kampala Sunrise Readers</div>
         <nav>
+          <button aria-selected="false" onclick="setPane('leader','create')">Set up</button>
           <button aria-selected="true" onclick="setPane('leader','overview')">Overview</button>
           <button aria-selected="false" onclick="setPane('leader','members')">Members</button>
           <button aria-selected="false" onclick="setPane('leader','schedule')">Schedule</button>
@@ -536,6 +613,50 @@
         <a class="back" href="#" onclick="jump('reader','reader','clubs'); return false;">← Back to app</a>
       </div>
       <div class="dash-main">
+
+        <!-- create (step 3: set up your club) -->
+        <div class="pane" data-scope="leader" data-pane="create" hidden>
+          <div class="flow-steps">
+            <span class="flow-step done"><span class="flow-num">✓</span>Get Started</span>
+            <span class="flow-step done"><span class="flow-num">✓</span>Sign Up</span>
+            <span class="flow-step active"><span class="flow-num">3</span>Set Up</span>
+            <span class="flow-step"><span class="flow-num">4</span>Your Space</span>
+          </div>
+          <h3 style="font-size:1.2rem;">Set up your club</h3>
+          <p class="lede" style="font-size:.86rem;">Name it, pick the first book, and decide how open it is — you can change all of this later.</p>
+          <div class="grid g2" style="align-items:start; margin-top:1rem;">
+            <div>
+              <div class="field"><label>Club name</label><input id="cc-name" type="text" value="Kampala Sunrise Readers"></div>
+              <div class="field"><label>Short description</label><textarea id="cc-desc" placeholder="What's this circle about?" style="min-height:4em;">A monthly circle for Ugandan and East African fiction, meeting in Kabalagala.</textarea></div>
+              <div class="field"><label>First book — title</label><input id="cc-book-title" type="text" value="Kintu"></div>
+              <div class="field"><label>First book — author</label><input id="cc-book-author" type="text" value="Jennifer Nansubuga Makumbi"></div>
+              <div class="field"><label>Meeting cadence</label>
+                <select id="cc-cadence"><option>Weekly</option><option selected>Every two weeks</option><option>Monthly</option></select>
+              </div>
+              <div class="field"><label>Who can join</label>
+                <select id="cc-privacy"><option>Public — anyone with the link</option><option>Private — invite only</option></select>
+              </div>
+              <button class="btn btn-primary" onclick="createClub()">Create my club</button>
+            </div>
+            <div>
+              <div class="card" id="cc-preview">
+                <span class="badge b-primary">Preview</span>
+                <h4 style="margin:.6rem 0 .2rem;" id="cc-preview-name">Kampala Sunrise Readers</h4>
+                <p style="font-size:.82rem; color:var(--ink-soft); margin-bottom:.6rem;" id="cc-preview-desc">A monthly circle for Ugandan and East African fiction, meeting in Kabalagala.</p>
+                <span class="badge b-secondary">Now reading</span>
+                <p style="font-size:.86rem; margin:.4rem 0 0;" id="cc-preview-book">Kintu — Jennifer Nansubuga Makumbi</p>
+              </div>
+              <div class="card" id="cc-link-card" style="margin-top:1rem; display:none;">
+                <span class="badge b-secondary">Your invite link is ready</span>
+                <p style="font-size:.84rem; margin:.6rem 0; word-break:break-all;" id="cc-link-text">kitabocircles.app/join/KSR-7F2Q</p>
+                <div class="btn-row">
+                  <button class="btn btn-outline btn-sm" onclick="copyInviteLink(event)">Copy link</button>
+                  <button class="btn btn-primary btn-sm" onclick="setPane('leader','overview')">Go to my dashboard</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- overview -->
         <div class="pane" data-scope="leader" data-pane="overview">
@@ -684,19 +805,39 @@
 
         <!-- library -->
         <div class="pane" data-scope="school" data-pane="library" hidden>
+          <div id="lib-first-run" class="flow-steps" hidden>
+            <span class="flow-step done"><span class="flow-num">✓</span>Get Started</span>
+            <span class="flow-step done"><span class="flow-num">✓</span>Sign Up</span>
+            <span class="flow-step active"><span class="flow-num">3</span>Set Up</span>
+            <span class="flow-step"><span class="flow-num">4</span>Your Space</span>
+          </div>
           <div class="grid g2" style="align-items:start; margin-bottom:1.5rem;">
             <div class="card">
               <h3 style="font-size:1rem;">Upload material</h3>
-              <div class="field"><label>Title</label><input placeholder="e.g. Akello and the Rain" /></div>
-              <div class="field"><label>Author</label><input placeholder="Author name" /></div>
-              <div class="field"><label>Level</label><select><option>Lower Primary (P.1–P.3)</option><option>Upper Primary (P.4–P.7)</option></select></div>
-              <div class="field"><label>Language</label><select><option>English</option><option>Luganda</option><option>Other</option></select></div>
-              <div class="field"><label>File or link</label><input placeholder="Upload PDF or paste a link" /></div>
-              <button class="btn btn-primary btn-block">Add to library</button>
+              <div class="field"><label>Title</label><input id="lib-title" placeholder="e.g. Akello and the Rain" /></div>
+              <div class="field"><label>Author</label><input id="lib-author" placeholder="Author name" /></div>
+              <div class="field"><label>Level</label>
+                <select id="lib-level"><option>Lower Primary (P.1–P.3)</option><option>Upper Primary (P.4–P.7)</option></select>
+              </div>
+              <div class="field"><label>Language</label>
+                <select id="lib-language"><option>English</option><option>Luganda</option><option>Other</option></select>
+              </div>
+              <div class="field">
+                <label>File</label>
+                <label class="file-drop" for="lib-file">
+                  <input type="file" id="lib-file" accept=".pdf,.epub,image/*" onchange="handleLibFile(event)">
+                  <span class="file-drop-label" id="lib-file-label">Click to choose a PDF, EPUB, or cover image</span>
+                </label>
+                <div class="file-preview" id="lib-file-preview" hidden>
+                  <img class="file-thumb" id="lib-file-thumb" alt="">
+                  <span id="lib-file-meta"></span>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-block" onclick="addLibraryItem()">Add to library</button>
             </div>
             <div>
               <h3 style="font-size:1rem;">In your library</h3>
-              <div class="grid g2">
+              <div class="grid g2" id="lib-grid">
                 <div class="card"><div class="book-cover" style="height:80px; background:var(--secondary-tint);"></div><h5 style="margin:.4rem 0 0; font-size:.82rem;">The Boy Who Harnessed the Wind</h5><span style="font-size:.7rem; color:var(--ink-soft);">Upper Primary · English</span></div>
                 <div class="card"><div class="book-cover" style="height:80px; background:var(--accent-tint);"></div><h5 style="margin:.4rem 0 0; font-size:.82rem;">Akello and the Rain</h5><span style="font-size:.7rem; color:var(--ink-soft);">Lower Primary · Luganda</span></div>
                 <div class="card"><div class="book-cover" style="height:80px; background:var(--primary-tint);"></div><h5 style="margin:.4rem 0 0; font-size:.82rem;">Sarah and the Fisherman</h5><span style="font-size:.7rem; color:var(--ink-soft);">Lower Primary · English</span></div>
@@ -893,7 +1034,65 @@
 </footer>
 
 <script>
-  var SCENARIOS = ['onboarding','reader','member','leader','school','kidstudent'];
+  var SCENARIOS = ['onboarding','signup','reader','member','leader','school','kidstudent'];
+
+  var PATHS = {
+    'start-club': {
+      title: 'Start your book club', extraLabel: 'Club name', extraPlaceholder: 'e.g. Kampala Sunrise Readers',
+      cta: 'Create my club', successBody: "Your club is ready to set up. Next, name your first book and share your invite link with readers.",
+      go: function () { showScenario('leader'); setPane('leader', 'create'); }
+    },
+    'join-club': {
+      title: 'Join a book club', extraLabel: 'Invite code', extraPlaceholder: 'e.g. KSR-7F2Q',
+      cta: 'Join the circle', successBody: "You're in the circle — here's the invite you followed.",
+      go: function () { showScenario('member'); setPane('member', 'invite'); }
+    },
+    'track-reading': {
+      title: 'Track your reading', cta: 'Start tracking',
+      successBody: "Your reading home base is ready — add the book you're on now.",
+      go: function () { showScenario('reader'); setPane('reader', 'myreading'); }
+    },
+    'discover': {
+      title: 'Discover your next read', cta: 'Browse books',
+      successBody: "Let's find your next read — curated Ugandan and East African picks are waiting.",
+      go: function () { showScenario('reader'); setPane('reader', 'discover'); }
+    },
+    'school-admin': {
+      title: 'Set up Kitabo Kids for your school', extraLabel: 'School name', extraPlaceholder: 'e.g. Green Hill Primary',
+      cta: 'Set up my school', successBody: "Your school workspace is ready. Next, upload your first reading materials.",
+      go: function () {
+        showScenario('school');
+        setPane('school', 'library');
+        var el = document.getElementById('lib-first-run');
+        if (el) el.hidden = false;
+      }
+    },
+    'student': {
+      title: 'Join your class', extraLabel: 'Class join code', extraPlaceholder: 'e.g. GHP-P6-2026',
+      cta: 'Join my class', successBody: "Welcome! Your teacher will confirm your class, and your reading passport is ready.",
+      go: function () { showScenario('kidstudent'); setPane('kidstudent', 'home'); }
+    }
+  };
+  var currentPath = null;
+
+  function choosePath(pathKey) {
+    currentPath = PATHS[pathKey];
+    document.getElementById('su-title').textContent = currentPath.title;
+    document.getElementById('su-submit').textContent = currentPath.cta;
+    var extraField = document.getElementById('su-extra-field');
+    if (currentPath.extraLabel) {
+      extraField.hidden = false;
+      document.getElementById('su-extra-label').textContent = currentPath.extraLabel;
+      document.getElementById('su-extra').placeholder = currentPath.extraPlaceholder || '';
+      document.getElementById('su-extra').required = true;
+    } else {
+      extraField.hidden = true;
+      document.getElementById('su-extra').required = false;
+    }
+    document.getElementById('signup-form-state').hidden = false;
+    document.getElementById('signup-success-state').hidden = true;
+    showScenario('signup');
+  }
 
   function showScenario(name) {
     SCENARIOS.forEach(function (s) {
@@ -925,6 +1124,120 @@
   function jump(scenario, scope, pane) {
     showScenario(scenario);
     if (scope && pane) setPane(scope, pane);
+  }
+
+  document.getElementById('su-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = (document.getElementById('su-name').value.trim() || 'there').split(' ')[0];
+    document.getElementById('signup-form-state').hidden = true;
+    document.getElementById('signup-success-state').hidden = false;
+    document.getElementById('ss-title').textContent = 'Welcome, ' + name + '!';
+    document.getElementById('ss-body').textContent = currentPath ? currentPath.successBody : "Now let's pick what brings you here.";
+    if (currentPath && currentPath.extraLabel === 'Club name') {
+      var clubName = document.getElementById('su-extra').value.trim();
+      if (clubName) {
+        document.getElementById('leader-org-name').textContent = clubName;
+        document.getElementById('cc-name').value = clubName;
+        document.getElementById('cc-preview-name').textContent = clubName;
+      }
+    }
+    document.getElementById('ss-continue').onclick = function () {
+      if (currentPath && currentPath.go) { currentPath.go(); } else { showScenario('onboarding'); }
+    };
+  });
+
+  function createClub() {
+    var name = document.getElementById('cc-name').value.trim() || 'My Book Club';
+    var desc = document.getElementById('cc-desc').value.trim();
+    var bookTitle = document.getElementById('cc-book-title').value.trim();
+    var bookAuthor = document.getElementById('cc-book-author').value.trim();
+    document.getElementById('cc-preview-name').textContent = name;
+    document.getElementById('cc-preview-desc').textContent = desc;
+    document.getElementById('cc-preview-book').textContent = bookTitle + (bookAuthor ? ' — ' + bookAuthor : '');
+    document.getElementById('leader-org-name').textContent = name;
+    var slug = name.trim().split(/\s+/).slice(0, 2).map(function (w) { return w[0]; }).join('').toUpperCase() || 'KC';
+    var code = Math.random().toString(36).slice(2, 6).toUpperCase();
+    document.getElementById('cc-link-text').textContent = 'kitabocircles.app/join/' + slug + '-' + code;
+    document.getElementById('cc-link-card').style.display = 'block';
+  }
+
+  function copyInviteLink(evt) {
+    var text = document.getElementById('cc-link-text').textContent;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).catch(function () {});
+    }
+    var btn = evt.currentTarget;
+    var original = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(function () { btn.textContent = original; }, 1500);
+  }
+
+  function formatBytes(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  var selectedLibFile = null;
+  function handleLibFile(e) {
+    var file = e.target.files && e.target.files[0];
+    selectedLibFile = file || null;
+    var preview = document.getElementById('lib-file-preview');
+    var label = document.getElementById('lib-file-label');
+    if (!file) { preview.hidden = true; label.textContent = 'Click to choose a PDF, EPUB, or cover image'; return; }
+    label.textContent = 'Selected — choose a different file';
+    document.getElementById('lib-file-meta').textContent = file.name + ' · ' + formatBytes(file.size);
+    var thumb = document.getElementById('lib-file-thumb');
+    if (file.type.indexOf('image/') === 0) {
+      thumb.src = URL.createObjectURL(file);
+      thumb.style.display = 'block';
+    } else {
+      thumb.removeAttribute('src');
+      thumb.style.display = 'none';
+    }
+    preview.hidden = false;
+  }
+
+  function addLibraryItem() {
+    var title = document.getElementById('lib-title').value.trim();
+    if (!title) { document.getElementById('lib-title').focus(); return; }
+    var author = document.getElementById('lib-author').value.trim();
+    var level = document.getElementById('lib-level').value;
+    var language = document.getElementById('lib-language').value;
+    var levelShort = level.indexOf('Lower') === 0 ? 'Lower Primary' : 'Upper Primary';
+
+    var card = document.createElement('div');
+    card.className = 'card';
+    var cover = document.createElement('div');
+    cover.className = 'book-cover';
+    cover.style.height = '80px';
+    if (selectedLibFile && selectedLibFile.type.indexOf('image/') === 0) {
+      cover.style.backgroundImage = 'url(' + URL.createObjectURL(selectedLibFile) + ')';
+      cover.style.backgroundSize = 'cover';
+      cover.style.backgroundPosition = 'center';
+    } else {
+      cover.style.background = 'var(--primary-tint)';
+    }
+    var h5 = document.createElement('h5');
+    h5.style.margin = '.4rem 0 0';
+    h5.style.fontSize = '.82rem';
+    h5.textContent = title;
+    var meta = document.createElement('span');
+    meta.style.fontSize = '.7rem';
+    meta.style.color = 'var(--ink-soft)';
+    meta.textContent = levelShort + ' · ' + language + (author ? ' · ' + author : '') + (selectedLibFile ? ' · ' + selectedLibFile.name : '');
+
+    card.appendChild(cover);
+    card.appendChild(h5);
+    card.appendChild(meta);
+    document.getElementById('lib-grid').prepend(card);
+
+    document.getElementById('lib-title').value = '';
+    document.getElementById('lib-author').value = '';
+    document.getElementById('lib-file').value = '';
+    selectedLibFile = null;
+    document.getElementById('lib-file-preview').hidden = true;
+    document.getElementById('lib-file-label').textContent = 'Click to choose a PDF, EPUB, or cover image';
   }
 
   function pickPrompt(type, credits) {
