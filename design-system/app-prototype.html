@@ -260,6 +260,7 @@
     <a class="brand" href="index.html" style="text-decoration:none;"><span class="brand-mark"></span>Kitabo Circles</a>
     <nav class="tabs" id="topnav">
       <button data-scenario="onboarding" aria-selected="true" onclick="showScenario('onboarding')">Get Started</button>
+      <button data-scenario="login" aria-selected="false" onclick="showScenario('login')">Log in</button>
       <button data-scenario="reader" aria-selected="false" onclick="showScenario('reader')">Reader App</button>
       <button data-scenario="member" aria-selected="false" onclick="showScenario('member')">Club · Member</button>
       <button data-scenario="leader" aria-selected="false" onclick="showScenario('leader')">Club · Leader</button>
@@ -316,6 +317,8 @@
               <button class="btn btn-outline btn-sm" onclick="choosePath('student')">I'm a student</button>
             </div>
           </div>
+
+          <p style="text-align:center; font-size:.8rem; color:var(--ink-soft); margin-top:1.2rem;">Already reading with us? <a href="#" onclick="showScenario('login'); return false;">Log in</a></p>
         </div>
       </div>
     </div>
@@ -352,7 +355,7 @@
             <div class="checkbox-row"><input type="checkbox" id="su-terms" required><label for="su-terms">I agree to the Kitabo Circles Terms and Privacy Policy.</label></div>
             <button type="submit" class="btn btn-primary btn-block" id="su-submit">Create account</button>
           </form>
-          <p class="auth-foot">Already reading with us? <a href="login.html">Log in</a></p>
+          <p class="auth-foot">Already reading with us? <a href="#" onclick="showScenario('login'); return false;">Log in</a></p>
         </div>
         <div id="signup-success-state" hidden style="text-align:center;">
           <span class="brand-mark" style="display:block; margin:0 auto 1rem; width:44px; height:44px;"></span>
@@ -360,6 +363,43 @@
           <h2 id="ss-title">Welcome!</h2>
           <p class="lede" style="margin:0 auto 1.4rem; max-width:34ch; font-size:.88rem;" id="ss-body">Your account has been created.</p>
           <button class="btn btn-primary btn-block" id="ss-continue">Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= LOG IN ======================= -->
+<section class="scenario" id="sc-login" hidden>
+  <div class="wrap">
+    <div class="scenario-head">
+      <span class="eyebrow">Returning reader</span>
+      <h1 style="font-size:1.8rem;">Welcome back</h1>
+      <p class="lede">The other way in — for anyone who already has a club, a reading log, or a Kitabo Kids account.</p>
+    </div>
+    <div class="auth-shell">
+      <div class="auth-card">
+        <div id="login-form-state">
+          <h2>Log in</h2>
+          <p class="lede" style="text-align:center; margin:0 auto 1.4rem; max-width:34ch; font-size:.88rem;">Log in to your reading circles, your progress, and your Kitabo Kids account.</p>
+          <form id="li-form">
+            <div class="field"><label>Email</label><input id="li-email" type="email" placeholder="you@example.com" required></div>
+            <div class="field"><label>Password</label><input id="li-password" type="password" placeholder="Your password" required></div>
+            <p style="margin:-0.4rem 0 1rem;"><a href="#" onclick="return false;" style="font-size:.8rem;">Forgot password?</a></p>
+            <button type="submit" class="btn btn-primary btn-block">Log in</button>
+          </form>
+          <p class="auth-foot">New to Kitabo Circles? <a href="#" onclick="showScenario('onboarding'); return false;">Get started</a></p>
+        </div>
+        <div id="login-success-state" hidden style="text-align:center;">
+          <span class="brand-mark" style="display:block; margin:0 auto 1rem; width:44px; height:44px;"></span>
+          <p class="eyebrow">Welcome back</p>
+          <h2>You're logged in</h2>
+          <p class="lede" style="margin:0 auto 1.2rem; max-width:34ch; font-size:.88rem;">Jump back into your reading, your circles, or your Kitabo Kids dashboard.</p>
+          <div class="btn-row" style="flex-direction:column;">
+            <button class="btn btn-primary btn-block" onclick="jump('reader','reader','discover')">Continue reading</button>
+            <button class="btn btn-outline btn-block" onclick="jump('reader','reader','clubs')">My clubs</button>
+            <button class="btn btn-outline btn-block" onclick="jump('kidstudent','kidstudent','home')">Kitabo Kids</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1034,7 +1074,7 @@
 </footer>
 
 <script>
-  var SCENARIOS = ['onboarding','signup','reader','member','leader','school','kidstudent'];
+  var SCENARIOS = ['onboarding','signup','login','reader','member','leader','school','kidstudent'];
 
   var PATHS = {
     'start-club': {
@@ -1125,6 +1165,12 @@
     showScenario(scenario);
     if (scope && pane) setPane(scope, pane);
   }
+
+  document.getElementById('li-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    document.getElementById('login-form-state').hidden = true;
+    document.getElementById('login-success-state').hidden = false;
+  });
 
   document.getElementById('su-form').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -1266,6 +1312,11 @@
     }
     if (initial !== 'onboarding') showScenario(initial);
   })();
+
+  window.addEventListener('hashchange', function () {
+    var h = window.location.hash.replace('#', '');
+    if (h && SCENARIOS.indexOf(h) !== -1) showScenario(h);
+  });
 </script>
 
 </body>
