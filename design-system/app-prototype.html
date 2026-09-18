@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Kitabo Circles — App Prototype</title>
+<meta name="description" content="A clickable app prototype for Kitabo Circles: onboarding, the reader app, book-club member and leader views, and the Kitabo Kids school-admin and student experience.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600&family=Manrope:wght@500;600;700;800&family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #faf9f5;
+    --surface: #ffffff;
+    --surface-2: #f3f1ea;
+    --ink: #2a2825;
+    --ink-soft: #6b6459;
+    --line: #e8e3d8;
+    --primary: #d97757;
+    --primary-strong: #a8532f;
+    --primary-tint: #fbeae1;
+    --secondary: #4f9169;
+    --secondary-strong: #316b4a;
+    --secondary-tint: #e3f1e7;
+    --accent: #c98a1a;
+    --accent-strong: #8f620f;
+    --accent-tint: #fcf0d6;
+    --lake: #3e8fbf;
+    --lake-strong: #256a94;
+    --lake-tint: #e4f1f8;
+    --danger: #c1503a;
+    --danger-tint: #fbe6e1;
+    --shadow-sm: 0 2px 10px rgba(42, 34, 20, 0.06);
+    --shadow-md: 0 12px 32px rgba(42, 34, 20, 0.12);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #17140f;
+      --surface: #201b15;
+      --surface-2: #29231b;
+      --ink: #f1e9da;
+      --ink-soft: #baac96;
+      --line: #3a3225;
+      --primary: #e88f6b;
+      --primary-strong: #f3ad8f;
+      --primary-tint: #3a271c;
+      --secondary: #6bbb8d;
+      --secondary-strong: #97d6b3;
+      --secondary-tint: #1d3527;
+      --accent: #dba53a;
+      --accent-strong: #eec877;
+      --accent-tint: #3a2c10;
+      --lake: #6cb4e0;
+      --lake-strong: #a0d1ee;
+      --lake-tint: #16303f;
+      --danger: #e07a63;
+      --danger-tint: #3a2018;
+      --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #17140f; --surface: #201b15; --surface-2: #29231b;
+    --ink: #f1e9da; --ink-soft: #baac96; --line: #3a3225;
+    --primary: #e88f6b; --primary-strong: #f3ad8f; --primary-tint: #3a271c;
+    --secondary: #6bbb8d; --secondary-strong: #97d6b3; --secondary-tint: #1d3527;
+    --accent: #dba53a; --accent-strong: #eec877; --accent-tint: #3a2c10;
+    --lake: #6cb4e0; --lake-strong: #a0d1ee; --lake-tint: #16303f;
+    --danger: #e07a63; --danger-tint: #3a2018;
+    --shadow-sm: 0 2px 10px rgba(0,0,0,.4); --shadow-md: 0 12px 32px rgba(0,0,0,.5);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Manrope', -apple-system, sans-serif; font-size: 15px; line-height: 1.55; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+  button { font: inherit; }
+  a { color: var(--lake); }
+  h1, h2, h3, h4 { font-family: 'Fraunces', Georgia, serif; line-height: 1.2; margin: 0 0 .4em; text-wrap: balance; font-weight: 600; color: var(--ink); }
+  p { margin: 0 0 .8em; }
+  :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding-inline: max(16px, env(safe-area-inset-left,0px)) max(16px, env(safe-area-inset-right,0px)); }
+
+  /* ---- top scenario switcher ---- */
+  header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: color-mix(in srgb, var(--paper) 90%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .topbar { display: flex; align-items: center; gap: 1rem; padding-block: .7rem; }
+  .brand { display: flex; align-items: center; gap: .55rem; font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.05rem; white-space: nowrap; color: var(--ink); text-decoration: none; }
+  .brand-mark { width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, var(--primary), var(--accent)); flex-shrink: 0; }
+  nav.tabs { display: flex; gap: .3rem; overflow-x: auto; scrollbar-width: none; }
+  nav.tabs::-webkit-scrollbar { display: none; }
+  nav.tabs button { font-weight: 700; font-size: .78rem; background: transparent; border: none; color: var(--ink-soft); padding: .5rem .8rem; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+  nav.tabs button:hover { color: var(--ink); background: var(--surface-2); }
+  nav.tabs button[aria-selected="true"] { background: var(--ink); color: var(--paper); }
+  .divider { height: 5px; background: repeating-linear-gradient(-45deg, var(--primary) 0 9px, var(--accent) 9px 18px, var(--secondary) 18px 27px); }
+
+  .scenario { padding-block: 2rem 4rem; }
+  .eyebrow { font-weight: 800; text-transform: uppercase; letter-spacing: .09em; font-size: .68rem; color: var(--primary-strong); }
+  .lede { font-size: 1.02rem; color: var(--ink-soft); max-width: 56ch; }
+  .scenario-head { margin-bottom: 1.75rem; }
+
+  /* ---- buttons / badges ---- */
+  .btn { display: inline-flex; align-items: center; gap: .4rem; font-weight: 700; font-size: .82rem; padding: .65em 1.2em; border-radius: 10px; border: 1.5px solid transparent; cursor: pointer; text-decoration: none; background: var(--surface-2); color: var(--ink); }
+  .btn-primary { background: var(--primary); color: #fff; box-shadow: var(--shadow-sm); }
+  .btn-primary:hover { background: var(--primary-strong); }
+  .btn-secondary { background: var(--secondary); color: #fff; }
+  .btn-outline { background: transparent; border-color: var(--line); color: var(--ink); }
+  .btn-outline:hover { border-color: var(--ink); }
+  .btn-sm { font-size: .72rem; padding: .45em .8em; }
+  .btn-block { width: 100%; justify-content: center; }
+  .btn-row { display: flex; gap: .6rem; flex-wrap: wrap; }
+
+  .badge { display: inline-flex; align-items: center; font-weight: 700; font-size: .64rem; text-transform: uppercase; letter-spacing: .04em; padding: .28em .65em; border-radius: 999px; }
+  .b-primary { background: var(--primary-tint); color: var(--primary-strong); }
+  .b-secondary { background: var(--secondary-tint); color: var(--secondary-strong); }
+  .b-accent { background: var(--accent-tint); color: var(--accent-strong); }
+  .b-lake { background: var(--lake-tint); color: var(--lake-strong); }
+  .b-danger { background: var(--danger-tint); color: var(--danger); }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1.1rem; box-shadow: var(--shadow-sm); }
+  .grid { display: grid; gap: 1rem; }
+  .g2 { grid-template-columns: repeat(2, 1fr); }
+  .g3 { grid-template-columns: repeat(3, 1fr); }
+  .g4 { grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 720px) { .g3, .g4 { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .g2, .g3, .g4 { grid-template-columns: 1fr; } }
+
+  .stat { padding: 1rem 1.1rem; }
+  .stat b { display: block; font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 600; }
+  .stat span { font-size: .78rem; color: var(--ink-soft); }
+
+  .bar { height: 8px; border-radius: 999px; background: var(--line); overflow: hidden; }
+  .bar > span { display: block; height: 100%; border-radius: 999px; background: var(--primary); }
+  .bar.b-sec > span { background: var(--secondary); }
+  .bar.b-warn > span { background: var(--accent); }
+  .bar.b-danger > span { background: var(--danger); }
+  .bar-row { display: flex; align-items: center; gap: .7rem; }
+  .bar-row .bar { flex: 1; }
+  .bar-label { font-size: .74rem; color: var(--ink-soft); white-space: nowrap; }
+
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--secondary-tint); color: var(--secondary-strong); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: .72rem; flex-shrink: 0; }
+  .avatar.sm { width: 24px; height: 24px; font-size: .6rem; }
+  .avatar-stack { display: flex; }
+  .avatar-stack .avatar { margin-left: -8px; border: 2px solid var(--surface); }
+  .avatar-stack .avatar:first-child { margin-left: 0; }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .82rem; min-width: 480px; }
+  th { text-align: left; color: var(--ink-soft); font-weight: 700; text-transform: uppercase; font-size: .64rem; letter-spacing: .04em; padding: .55rem .6rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  td { padding: .6rem .6rem; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+
+  .field { display: flex; flex-direction: column; gap: .3rem; margin-bottom: .9rem; }
+  .field label { font-size: .74rem; font-weight: 700; color: var(--ink-soft); }
+  .field input, .field select, .field textarea {
+    font: inherit; padding: .6em .75em; border-radius: 8px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); width: 100%;
+  }
+  .field textarea { resize: vertical; min-height: 5.5em; font-family: 'Literata', serif; }
+
+  .alert { display: flex; gap: .8rem; align-items: flex-start; padding: 1rem 1.1rem; border-radius: 12px; background: var(--accent-tint); border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); }
+  .alert.danger { background: var(--danger-tint); border-color: color-mix(in srgb, var(--danger) 40%, transparent); }
+  .alert-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); margin-top: .35rem; flex-shrink: 0; }
+  .alert.danger .alert-dot { background: var(--danger); }
+
+  .section-title { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+
+  /* ---- phone chrome ---- */
+  .phone-shell { width: 380px; max-width: 100%; margin: 0 auto; background: #111; border-radius: 34px; padding: 10px; box-shadow: var(--shadow-md); }
+  .phone-screen { background: var(--paper); border-radius: 26px; overflow: hidden; display: flex; flex-direction: column; height: 720px; }
+  .phone-app-bar { padding: 1rem 1.1rem .75rem; border-bottom: 1px solid var(--line); background: var(--surface); flex-shrink: 0; }
+  .phone-body { flex: 1; overflow-y: auto; padding: 1rem 1.1rem 1.5rem; }
+  .phone-tabbar { display: flex; border-top: 1px solid var(--line); background: var(--surface); flex-shrink: 0; }
+  .phone-tabbar button { flex: 1; background: none; border: none; padding: .6rem .2rem calc(.6rem + env(safe-area-inset-bottom,0px)); font-size: .66rem; font-weight: 700; color: var(--ink-soft); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: .3rem; }
+  .phone-tabbar button .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--line); }
+  .phone-tabbar button[aria-selected="true"] { color: var(--primary-strong); }
+  .phone-tabbar button[aria-selected="true"] .dot { background: var(--primary); }
+
+  .opt-card { display: flex; align-items: center; gap: .85rem; padding: 1rem; border-radius: 14px; border: 1.5px solid var(--line); background: var(--surface); cursor: pointer; text-align: left; width: 100%; margin-bottom: .75rem; }
+  .opt-card:hover { border-color: var(--primary); }
+  .opt-icon { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; }
+  .opt-card h4 { margin: 0 0 .15rem; font-size: .95rem; font-family: 'Manrope', sans-serif; font-weight: 800; }
+  .opt-card p { margin: 0; font-size: .78rem; color: var(--ink-soft); }
+
+  .book-tile { width: 108px; flex-shrink: 0; }
+  .book-cover { height: 140px; border-radius: 8px; margin-bottom: .4rem; }
+  .book-tile h5 { font-size: .78rem; margin: 0; font-family: 'Manrope', sans-serif; font-weight: 700; }
+  .book-tile span { font-size: .68rem; color: var(--ink-soft); }
+  .shelf { display: flex; gap: .75rem; overflow-x: auto; padding-bottom: .3rem; margin: 0 -1.1rem; padding-inline: 1.1rem; }
+  .chip-row { display: flex; gap: .4rem; overflow-x: auto; margin-bottom: .9rem; }
+  .chip { flex-shrink: 0; padding: .35em .85em; border-radius: 999px; background: var(--surface-2); font-size: .74rem; font-weight: 700; color: var(--ink-soft); border: 1px solid var(--line); }
+  .chip[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .msg { display: flex; gap: .6rem; margin-bottom: .9rem; align-items: flex-start; }
+  .msg-body { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: .6rem .8rem; flex: 1; }
+  .msg-name { font-weight: 800; font-size: .76rem; }
+  .msg-time { font-size: .66rem; color: var(--ink-soft); margin-left: .4rem; }
+  .msg-text { font-family: 'Literata', serif; font-size: .88rem; margin-top: .15rem; }
+
+  /* ---- dashboard chrome ---- */
+  .dash { display: flex; border-radius: 20px; overflow: hidden; border: 1px solid var(--line); box-shadow: var(--shadow-sm); background: var(--surface); min-height: 680px; }
+  .dash-side { width: 220px; flex-shrink: 0; background: var(--surface-2); padding: 1.4rem 1rem; display: flex; flex-direction: column; }
+  .dash-side .org { font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.05rem; margin-bottom: 1.4rem; padding-inline: .4rem; }
+  .dash-side nav { display: flex; flex-direction: column; gap: .2rem; }
+  .dash-side nav button { text-align: left; background: none; border: none; padding: .6rem .7rem; border-radius: 9px; font-weight: 700; font-size: .82rem; color: var(--ink-soft); cursor: pointer; }
+  .dash-side nav button:hover { background: var(--surface); }
+  .dash-side nav button[aria-selected="true"] { background: var(--surface); color: var(--primary-strong); }
+  .dash-side .back { margin-top: auto; font-size: .76rem; }
+  .dash-main { flex: 1; padding: 1.75rem; overflow-y: auto; max-height: 680px; min-width: 0; }
+  @media (max-width: 780px) {
+    .dash { flex-direction: column; min-height: 0; }
+    .dash-side { width: 100%; flex-direction: row; align-items: center; overflow-x: auto; gap: .5rem; padding: .9rem; }
+    .dash-side .org { margin: 0 .5rem 0 0; white-space: nowrap; }
+    .dash-side nav { flex-direction: row; }
+    .dash-side nav button { white-space: nowrap; }
+    .dash-side .back { display: none; }
+    .dash-main { max-height: none; }
+  }
+
+  .credit-ladder { display: flex; flex-direction: column; gap: .7rem; }
+  .credit-step { display: flex; align-items: center; gap: .8rem; padding: .8rem .9rem; border-radius: 12px; border: 1px solid var(--line); }
+  .credit-step .num { font-family: 'Fraunces', serif; font-weight: 600; font-size: 1rem; width: 3.4rem; flex-shrink: 0; color: var(--primary-strong); }
+
+  footer.site { background: var(--ink); color: var(--surface-2); padding-block: 1.75rem; font-size: .78rem; }
+  footer.site .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .6rem; }
+  footer.site a { color: var(--accent); }
+  @media (prefers-color-scheme: dark) { footer.site { background: #0d0b08; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap topbar">
+    <a class="brand" href="index.html" style="text-decoration:none;"><span class="brand-mark"></span>Kitabo Circles</a>
+    <nav class="tabs" id="topnav">
+      <button data-scenario="onboarding" aria-selected="true" onclick="showScenario('onboarding')">Get Started</button>
+      <button data-scenario="reader" aria-selected="false" onclick="showScenario('reader')">Reader App</button>
+      <button data-scenario="member" aria-selected="false" onclick="showScenario('member')">Club · Member</button>
+      <button data-scenario="leader" aria-selected="false" onclick="showScenario('leader')">Club · Leader</button>
+      <button data-scenario="school" aria-selected="false" onclick="showScenario('school')">Kitabo Kids · School Admin</button>
+      <button data-scenario="kidstudent" aria-selected="false" onclick="showScenario('kidstudent')">Kitabo Kids · Student</button>
+    </nav>
+  </div>
+  <div class="divider"></div>
+</header>
+
+<!-- ======================= ONBOARDING ======================= -->
+<section class="scenario" id="sc-onboarding">
+  <div class="wrap">
+    <div class="scenario-head">
+      <span class="eyebrow">First run</span>
+      <h1 style="font-size:1.8rem;">Choosing a path into Kitabo Circles</h1>
+      <p class="lede">Every new reader starts here. The four options map to the app's four real jobs — the fifth path, for schools, breaks off into its own product.</p>
+    </div>
+    <div class="phone-shell">
+      <div class="phone-screen">
+        <div class="phone-app-bar" style="text-align:center;">
+          <span class="brand" style="justify-content:center;"><span class="brand-mark"></span>Kitabo Circles</span>
+        </div>
+        <div class="phone-body">
+          <p class="lede" style="text-align:center; margin:0 auto 1.2rem; font-size:.88rem;">Reading together, writing our own story. What brings you here today?</p>
+
+          <button class="opt-card" onclick="jump('leader','leader','overview')">
+            <span class="opt-icon" style="background:var(--primary-tint);"></span>
+            <span><h4>Start a Book Club</h4><p>Create a circle, invite readers, pick the first book.</p></span>
+          </button>
+          <button class="opt-card" onclick="jump('member','member','invite')">
+            <span class="opt-icon" style="background:var(--lake-tint);"></span>
+            <span><h4>Join a Book Club</h4><p>Have a link or code from a leader? Land right on their circle.</p></span>
+          </button>
+          <button class="opt-card" onclick="jump('reader','reader','myreading')">
+            <span class="opt-icon" style="background:var(--secondary-tint);"></span>
+            <span><h4>Track My Reading</h4><p>Reading solo? Log books and keep your own streak.</p></span>
+          </button>
+          <button class="opt-card" onclick="jump('reader','reader','discover')">
+            <span class="opt-icon" style="background:var(--accent-tint);"></span>
+            <span><h4>Discover Books</h4><p>Browse curated Ugandan and East African reads.</p></span>
+          </button>
+
+          <div style="text-align:center; margin-top:1.3rem; padding-top:1rem; border-top:1px solid var(--line);">
+            <p style="font-size:.78rem; color:var(--ink-soft); margin-bottom:.5rem;">Reading with a school?</p>
+            <div class="btn-row" style="justify-content:center;">
+              <button class="btn btn-outline btn-sm" onclick="jump('school','school','overview')">I'm the school admin</button>
+              <button class="btn btn-outline btn-sm" onclick="jump('kidstudent','kidstudent','home')">I'm a student</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= READER APP ======================= -->
+<section class="scenario" id="sc-reader" hidden>
+  <div class="wrap">
+    <div class="scenario-head">
+      <span class="eyebrow">Everyday app · individual reader</span>
+      <h1 style="font-size:1.8rem;">The reading home base</h1>
+      <p class="lede">One app for readers with no club at all, readers juggling several, and readers who just want their streak intact. Four tabs, no dead ends.</p>
+    </div>
+    <div class="phone-shell">
+      <div class="phone-screen">
+        <div class="phone-app-bar">
+          <strong id="reader-title" style="font-family:'Fraunces',serif; font-size:1.1rem;">Discover</strong>
+        </div>
+        <div class="phone-body">
+
+          <!-- Discover -->
+          <div class="pane" data-scope="reader" data-pane="discover">
+            <input class="field" style="margin-bottom:1rem;" placeholder="Search titles, authors, circles…" />
+            <div class="chip-row">
+              <span class="chip" aria-selected="true">All</span>
+              <span class="chip">Fiction</span>
+              <span class="chip">Poetry</span>
+              <span class="chip">Memoir</span>
+              <span class="chip">Kids</span>
+            </div>
+            <div class="card" style="margin-bottom:1.2rem;">
+              <span class="badge b-primary">This month's pick</span>
+              <h4 style="margin-top:.6rem; font-size:1rem;">Kintu</h4>
+              <p style="font-size:.82rem; color:var(--ink-soft); margin-bottom:.7rem;">Jennifer Nansubuga Makumbi · Fiction</p>
+              <button class="btn btn-primary btn-sm">Add to reading list</button>
+            </div>
+            <div class="section-title"><h4 style="font-size:.88rem; margin:0;">Ugandan &amp; East African authors</h4></div>
+            <div class="shelf" style="margin-bottom:1.2rem;">
+              <div class="book-tile"><div class="book-cover" style="background:var(--primary-tint);"></div><h5>The First Woman</h5><span>J. N. Makumbi</span></div>
+              <div class="book-tile"><div class="book-cover" style="background:var(--secondary-tint);"></div><h5>Tropical Fish</h5><span>Doreen Baingana</span></div>
+              <div class="book-tile"><div class="book-cover" style="background:var(--lake-tint);"></div><h5>Waiting</h5><span>Goretti Kyomuhendo</span></div>
+            </div>
+            <div class="section-title"><h4 style="font-size:.88rem; margin:0;">Trending in circles</h4></div>
+            <div class="shelf">
+              <div class="book-tile"><div class="book-cover" style="background:var(--accent-tint);"></div><h5>Kintu</h5><span>J. N. Makumbi</span></div>
+              <div class="book-tile"><div class="book-cover" style="background:var(--primary-tint);"></div><h5>Secrets No More</h5><span>G. Kyomuhendo</span></div>
+            </div>
+          </div>
+
+          <!-- My Reading -->
+          <div class="pane" data-scope="reader" data-pane="myreading" hidden>
+            <div class="card" style="margin-bottom:1rem;">
+              <span class="badge b-secondary">Currently reading</span>
+              <h4 style="margin-top:.6rem; font-size:1rem;">Kintu</h4>
+              <div class="bar-row" style="margin:.5rem 0 .4rem;"><div class="bar"><span style="width:62%;"></span></div><span class="bar-label">62%</span></div>
+              <button class="btn btn-outline btn-sm">Update progress</button>
+            </div>
+            <div class="grid g3" style="margin-bottom:1rem;">
+              <div class="card stat" style="padding:.8rem;"><b>14</b><span>Books this year</span></div>
+              <div class="card stat" style="padding:.8rem;"><b>6</b><span>Day streak</span></div>
+              <div class="card stat" style="padding:.8rem;"><b>3,240</b><span>Pages read</span></div>
+            </div>
+            <div class="card" style="margin-bottom:1rem;">
+              <div class="section-title" style="margin-bottom:.5rem;"><h4 style="font-size:.85rem; margin:0;">2026 goal</h4><span class="bar-label">14 / 20 books</span></div>
+              <div class="bar"><span style="width:70%;"></span></div>
+            </div>
+            <h4 style="font-size:.85rem;">Up next</h4>
+            <p style="font-size:.82rem; margin:0 0 .3rem;">The First Woman — J. N. Makumbi</p>
+            <p style="font-size:.82rem; color:var(--ink-soft); margin-bottom:1rem;">Tropical Fish: Tales from Entebbe — D. Baingana</p>
+            <h4 style="font-size:.85rem;">Recently finished</h4>
+            <p style="font-size:.82rem; margin:0;">Secrets No More — G. Kyomuhendo</p>
+          </div>
+
+          <!-- Clubs -->
+          <div class="pane" data-scope="reader" data-pane="clubs" hidden>
+            <div class="btn-row" style="margin-bottom:1rem;">
+              <button class="btn btn-primary btn-sm" onclick="jump('leader','leader','overview')">+ Start a club</button>
+              <button class="btn btn-outline btn-sm" onclick="jump('member','member','invite')">Join with a code</button>
+            </div>
+            <button class="opt-card" onclick="jump('leader','leader','overview')">
+              <span class="opt-icon" style="background:var(--primary-tint);"></span>
+              <span>
+                <h4 style="display:flex; gap:.4rem; align-items:center;">Kampala Sunrise Readers <span class="badge b-primary">Leader</span></h4>
+                <p>18 members · reading "Kintu"</p>
+              </span>
+            </button>
+            <button class="opt-card" onclick="jump('member','member','discussion')">
+              <span class="opt-icon" style="background:var(--lake-tint);"></span>
+              <span>
+                <h4 style="display:flex; gap:.4rem; align-items:center;">Wakiso Poetry Circle <span class="badge b-lake">Member</span></h4>
+                <p>9 members · reading a shared poetry set</p>
+              </span>
+            </button>
+          </div>
+
+          <!-- Profile -->
+          <div class="pane" data-scope="reader" data-pane="profile" hidden>
+            <div style="display:flex; align-items:center; gap:.8rem; margin-bottom:1.2rem;">
+              <span class="avatar" style="width:52px; height:52px; font-size:1.1rem;">AN</span>
+              <div><h4 style="margin:0; font-size:1rem;">Achen N.</h4><span style="font-size:.78rem; color:var(--ink-soft);">achen@example.com</span></div>
+            </div>
+            <div class="card" style="margin-bottom:1rem;">
+              <span class="badge b-primary">Msomaji plan</span>
+              <p style="font-size:.82rem; margin:.5rem 0 0;">One book a month, digital or print, plus circle access.</p>
+              <a href="#" style="font-size:.8rem; display:inline-block; margin-top:.4rem;">Manage subscription →</a>
+            </div>
+            <div class="table-wrap">
+              <table style="min-width:0;">
+                <tr><td>Notifications</td><td style="text-align:right; color:var(--ink-soft);">On</td></tr>
+                <tr><td>Language</td><td style="text-align:right; color:var(--ink-soft);">English</td></tr>
+                <tr><td>Payment method</td><td style="text-align:right; color:var(--ink-soft);">MTN MoMo</td></tr>
+                <tr><td>Help &amp; support</td><td style="text-align:right; color:var(--ink-soft);">›</td></tr>
+              </table>
+            </div>
+          </div>
+
+        </div>
+        <div class="phone-tabbar">
+          <button class="pane-btn" data-scope="reader" data-pane="discover" aria-selected="true" onclick="setPane('reader','discover'); document.getElementById('reader-title').textContent='Discover';"><span class="dot"></span>Discover</button>
+          <button class="pane-btn" data-scope="reader" data-pane="myreading" aria-selected="false" onclick="setPane('reader','myreading'); document.getElementById('reader-title').textContent='My Reading';"><span class="dot"></span>My Reading</button>
+          <button class="pane-btn" data-scope="reader" data-pane="clubs" aria-selected="false" onclick="setPane('reader','clubs'); document.getElementById('reader-title').textContent='My Clubs';"><span class="dot"></span>Clubs</button>
+          <button class="pane-btn" data-scope="reader" data-pane="profile" aria-selected="false" onclick="setPane('reader','profile'); document.getElementById('reader-title').textContent='Profile';"><span class="dot"></span>Profile</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CLUB — MEMBER ======================= -->
+<section class="scenario" id="sc-member" hidden>
+  <div class="wrap">
+    <div class="scenario-head">
+      <span class="eyebrow">Invited by a leader</span>
+      <h1 style="font-size:1.8rem;">What a member actually opens</h1>
+      <p class="lede">A leader's invite link drops a reader straight onto the circle's page — no separate "club app" to learn, just a focused view scoped to that one club.</p>
+    </div>
+    <div class="phone-shell">
+      <div class="phone-screen">
+        <div class="phone-app-bar">
+          <strong id="member-title" style="font-family:'Fraunces',serif; font-size:1.1rem;">Kampala Sunrise Readers</strong>
+        </div>
+        <div class="phone-body">
+
+          <!-- Invite landing -->
+          <div class="pane" data-scope="member" data-pane="invite" hidden>
+            <p class="lede" style="font-size:.85rem; margin-bottom:1rem;">You've been invited to join</p>
+            <div class="card" style="text-align:center; margin-bottom:1.2rem;">
+              <div class="avatar" style="width:56px; height:56px; font-size:1.2rem; margin:0 auto .7rem;">KS</div>
+              <h4 style="font-size:1.1rem;">Kampala Sunrise Readers</h4>
+              <p style="font-size:.82rem; color:var(--ink-soft); margin-bottom:.8rem;">Led by Achen N. · 18 members · now reading "Kintu"</p>
+              <button class="btn btn-primary btn-block" onclick="setPane('member','discussion'); document.getElementById('member-title').textContent='Kampala Sunrise Readers';">Accept &amp; join</button>
+              <button class="btn btn-outline btn-block" style="margin-top:.5rem;" onclick="jump('reader','reader','discover')">Not now</button>
+            </div>
+            <p style="font-size:.76rem; color:var(--ink-soft); text-align:center;">Invite link: kitabocircles.app/join/KSR-7F2Q</p>
+          </div>
+
+          <!-- Discussion -->
+          <div class="pane" data-scope="member" data-pane="discussion">
+            <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:1rem;">
+              <div class="avatar-stack"><span class="avatar sm">AN</span><span class="avatar sm">TK</span><span class="avatar sm">MO</span></div>
+              <span style="font-size:.74rem; color:var(--ink-soft);">18 members · Leader: Achen N.</span>
+            </div>
+            <div class="card" style="margin-bottom:1rem; border-color:var(--primary);">
+              <span class="badge b-primary">This week's prompt</span>
+              <p style="font-family:'Literata',serif; margin:.5rem 0 0; font-size:.92rem;">Which character's decision surprised you most in chapters 5–8, and why?</p>
+            </div>
+            <div class="msg"><span class="avatar sm">TK</span><div class="msg-body"><span class="msg-name">Tendo K.<span class="msg-time">Tue 8:14pm</span></span><p class="msg-text">Kamu's silence at the funeral got me — I expected him to speak up.</p></div></div>
+            <div class="msg"><span class="avatar sm">MO</span><div class="msg-body"><span class="msg-name">Mirembe O.<span class="msg-time">Wed 6:02am</span></span><p class="msg-text">Agreed. It reframed everything I thought about that family for me.</p></div></div>
+            <div class="msg"><span class="avatar sm">AN</span><div class="msg-body"><span class="msg-name">Achen N. <span class="badge b-primary" style="font-size:.55rem;">Leader</span><span class="msg-time">Wed 7:40am</span></span><p class="msg-text">Great thread — let's bring this up Saturday too.</p></div></div>
+            <div class="field" style="margin-top:1rem;"><textarea placeholder="Add your thoughts…" style="min-height:3.2em;"></textarea></div>
+            <button class="btn btn-primary btn-sm">Send</button>
+          </div>
+
+          <!-- Schedule -->
+          <div class="pane" data-scope="member" data-pane="schedule" hidden>
+            <div class="card" style="margin-bottom:1rem;">
+              <span class="badge b-lake">Upcoming meetup</span>
+              <h4 style="margin:.6rem 0 .1rem; font-size:1rem;">Sat, Oct 4 · 5:00 PM</h4>
+              <p style="font-size:.82rem; color:var(--ink-soft); margin-bottom:.8rem;">Javas Kabalagala — or join virtually</p>
+              <div class="btn-row">
+                <button class="btn btn-primary btn-sm">Going · 12</button>
+                <button class="btn btn-outline btn-sm">Maybe · 3</button>
+                <button class="btn btn-outline btn-sm">Can't go · 1</button>
+              </div>
+            </div>
+            <h4 style="font-size:.85rem;">Past meetups</h4>
+            <div class="table-wrap"><table style="min-width:0;">
+              <tr><td>Sep 6</td><td style="color:var(--ink-soft);">Kintu, ch. 1–4 recap</td></tr>
+              <tr><td>Aug 9</td><td style="color:var(--ink-soft);">Kickoff &amp; book selection</td></tr>
+            </table></div>
+          </div>
+
+          <!-- Reading list -->
+          <div class="pane" data-scope="member" data-pane="list" hidden>
+            <div class="card" style="margin-bottom:1rem;">
+              <span class="badge b-secondary">Now reading</span>
+              <h4 style="margin:.6rem 0 .3rem; font-size:1rem;">Kintu</h4>
+              <span style="font-size:.76rem; color:var(--ink-soft);">14 of 18 members on ch. 5 or later</span>
+            </div>
+            <h4 style="font-size:.85rem;">Vote: next book</h4>
+            <div style="margin-bottom:.6rem;"><div class="bar-row"><span style="font-size:.82rem; width:9.5rem;">The First Woman</span><div class="bar"><span style="width:78%;"></span></div><span class="bar-label">14</span></div></div>
+            <div style="margin-bottom:1rem;"><div class="bar-row"><span style="font-size:.82rem; width:9.5rem;">Tropical Fish</span><div class="bar b-sec"><span style="width:22%;"></span></div><span class="bar-label">4</span></div></div>
+            <h4 style="font-size:.85rem;">Previously read</h4>
+            <p style="font-size:.82rem; margin:0;">Secrets No More — G. Kyomuhendo</p>
+            <p style="font-size:.82rem; color:var(--ink-soft);">Waiting — G. Kyomuhendo</p>
+          </div>
+
+          <!-- Members -->
+          <div class="pane" data-scope="member" data-pane="members" hidden>
+            <input class="field" placeholder="Search members…" style="margin-bottom:1rem;" />
+            <div class="table-wrap"><table style="min-width:0;">
+              <tr><td><span class="avatar sm" style="margin-right:.5rem;">AN</span>Achen N.</td><td><span class="badge b-primary">Leader</span></td></tr>
+              <tr><td><span class="avatar sm" style="margin-right:.5rem;">TK</span>Tendo K.</td><td style="color:var(--ink-soft); font-size:.76rem;">Joined Mar 2025</td></tr>
+              <tr><td><span class="avatar sm" style="margin-right:.5rem;">MO</span>Mirembe O.</td><td style="color:var(--ink-soft); font-size:.76rem;">Joined Apr 2025</td></tr>
+              <tr><td><span class="avatar sm" style="margin-right:.5rem;">JB</span>Julius B.</td><td style="color:var(--ink-soft); font-size:.76rem;">Joined Jun 2025</td></tr>
+            </table></div>
+          </div>
+
+        </div>
+        <div class="phone-tabbar">
+          <button class="pane-btn" data-scope="member" data-pane="discussion" aria-selected="true" onclick="setPane('member','discussion')"><span class="dot"></span>Discuss</button>
+          <button class="pane-btn" data-scope="member" data-pane="schedule" aria-selected="false" onclick="setPane('member','schedule')"><span class="dot"></span>Schedule</button>
+          <button class="pane-btn" data-scope="member" data-pane="list" aria-selected="false" onclick="setPane('member','list')"><span class="dot"></span>Reading</button>
+          <button class="pane-btn" data-scope="member" data-pane="members" aria-selected="false" onclick="setPane('member','members')"><span class="dot"></span>Members</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CLUB — LEADER ======================= -->
+<section class="scenario" id="sc-leader" hidden>
+  <div class="wrap">
+    <div class="scenario-head">
+      <span class="eyebrow">Running a circle</span>
+      <h1 style="font-size:1.8rem;">The leader's control room</h1>
+      <p class="lede">Leaders manage more surface area than they read — members, meetups, prompts, the next book — so this opens as a wider dashboard rather than a cramped phone screen.</p>
+    </div>
+    <div class="dash">
+      <div class="dash-side">
+        <div class="org">Kampala Sunrise Readers</div>
+        <nav>
+          <button aria-selected="true" onclick="setPane('leader','overview')">Overview</button>
+          <button aria-selected="false" onclick="setPane('leader','members')">Members</button>
+          <button aria-selected="false" onclick="setPane('leader','schedule')">Schedule</button>
+          <button aria-selected="false" onclick="setPane('leader','activities')">Activities &amp; prompts</button>
+          <button aria-selected="false" onclick="setPane('leader','list')">Reading list</button>
+        </nav>
+        <a class="back" href="#" onclick="jump('reader','reader','clubs'); return false;">← Back to app</a>
+      </div>
+      <div class="dash-main">
+
+        <!-- overview -->
+        <div class="pane" data-scope="leader" data-pane="overview">
+          <div class="grid g3" style="margin-bottom:1.5rem;">
+            <div class="card stat"><b>18</b><span>Members</span></div>
+            <div class="card stat"><b>82%</b><span>Avg. engagement</span></div>
+            <div class="card stat"><b>54%</b><span>Avg. book progress</span></div>
+          </div>
+          <h3 style="font-size:1.1rem;">Recent activity</h3>
+          <div class="table-wrap"><table>
+            <tr><td>Mirembe O. replied to this week's prompt</td><td style="color:var(--ink-soft); white-space:nowrap;">2h ago</td></tr>
+            <tr><td>3 members RSVP'd "Going" to the Oct 4 meetup</td><td style="color:var(--ink-soft); white-space:nowrap;">Yesterday</td></tr>
+            <tr><td>Julius B. finished "Kintu"</td><td style="color:var(--ink-soft); white-space:nowrap;">2 days ago</td></tr>
+          </table></div>
+        </div>
+
+        <!-- members -->
+        <div class="pane" data-scope="leader" data-pane="members" hidden>
+          <div class="section-title"><h3 style="font-size:1.1rem; margin:0;">Members</h3><button class="btn btn-primary btn-sm">Invite more readers</button></div>
+          <div class="card" style="margin-bottom:1.2rem; display:flex; align-items:center; gap:.8rem; flex-wrap:wrap;">
+            <span style="font-size:.82rem; color:var(--ink-soft); flex:1; min-width:200px;">kitabocircles.app/join/KSR-7F2Q</span>
+            <button class="btn btn-outline btn-sm">Copy link</button>
+            <button class="btn btn-outline btn-sm">Regenerate</button>
+          </div>
+          <div class="table-wrap"><table>
+            <tr><th>Name</th><th>Joined</th><th>Books completed</th><th>Last active</th><th>Role</th></tr>
+            <tr><td>Achen N.</td><td>Mar 2025</td><td>9</td><td>Today</td><td><span class="badge b-primary">Leader</span></td></tr>
+            <tr><td>Tendo K.</td><td>Mar 2025</td><td>7</td><td>Today</td><td><span class="badge b-secondary">Co-leader</span></td></tr>
+            <tr><td>Mirembe O.</td><td>Apr 2025</td><td>8</td><td>2h ago</td><td>Member</td></tr>
+            <tr><td>Julius B.</td><td>Jun 2025</td><td>6</td><td>2 days ago</td><td>Member</td></tr>
+            <tr><td>Nsubuga R.</td><td>Jun 2025</td><td>4</td><td>1 week ago</td><td>Member</td></tr>
+          </table></div>
+        </div>
+
+        <!-- schedule -->
+        <div class="pane" data-scope="leader" data-pane="schedule" hidden>
+          <div class="grid g2" style="align-items:start;">
+            <div>
+              <h3 style="font-size:1.1rem;">Schedule a meetup</h3>
+              <div class="field"><label>Date &amp; time</label><input type="text" value="Sat, Oct 4 · 5:00 PM" /></div>
+              <div class="field"><label>Mode</label><select><option>In person</option><option>Virtual</option></select></div>
+              <div class="field"><label>Location / link</label><input type="text" value="Javas Kabalagala" /></div>
+              <div class="field"><label>Notes for members</label><textarea>Bring your copy — we're discussing chapters 5–8.</textarea></div>
+              <button class="btn btn-primary">Create meetup</button>
+            </div>
+            <div>
+              <h3 style="font-size:1.1rem;">Upcoming &amp; past</h3>
+              <div class="card" style="margin-bottom:.8rem;">
+                <strong style="font-size:.88rem;">Sat, Oct 4 — Javas Kabalagala</strong>
+                <div class="bar-row" style="margin-top:.6rem;"><span class="bar-label" style="width:5rem;">Going 12</span><div class="bar"><span style="width:67%;"></span></div></div>
+                <div class="bar-row"><span class="bar-label" style="width:5rem;">Maybe 3</span><div class="bar b-warn"><span style="width:17%;"></span></div></div>
+                <div class="bar-row"><span class="bar-label" style="width:5rem;">Can't go 1</span><div class="bar b-danger"><span style="width:6%;"></span></div></div>
+              </div>
+              <p style="font-size:.82rem; color:var(--ink-soft);">Sep 6 — Kintu, ch. 1–4 recap (14 attended)</p>
+              <p style="font-size:.82rem; color:var(--ink-soft);">Aug 9 — Kickoff &amp; book selection (16 attended)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- activities -->
+        <div class="pane" data-scope="leader" data-pane="activities" hidden>
+          <h3 style="font-size:1.1rem;">Post a discussion prompt</h3>
+          <div class="field"><textarea placeholder="Ask the circle something…">Which character's decision surprised you most in chapters 5–8, and why?</textarea></div>
+          <button class="btn btn-primary" style="margin-bottom:1.4rem;">Post to club</button>
+          <h4 style="font-size:.92rem;">Past prompts</h4>
+          <div class="table-wrap" style="margin-bottom:1.4rem;"><table>
+            <tr><td>What did the opening chapter get right about family?</td><td style="white-space:nowrap;"><span class="badge b-lake">11 replies</span></td></tr>
+            <tr><td>Pick one line worth reading twice.</td><td style="white-space:nowrap;"><span class="badge b-lake">15 replies</span></td></tr>
+          </table></div>
+          <h3 style="font-size:1.1rem;">Propose an activity</h3>
+          <div class="chip-row" style="margin-bottom:1rem;">
+            <span class="chip">+ Book swap</span><span class="chip">+ Author Q&amp;A</span><span class="chip">+ Bookstore field trip</span><span class="chip">+ Themed potluck</span>
+          </div>
+          <div class="table-wrap"><table>
+            <tr><td>Bookstore field trip — Aristoc, Garden City</td><td style="white-space:nowrap;"><span class="badge b-secondary">9 votes</span></td></tr>
+            <tr><td>Author Q&amp;A (virtual)</td><td style="white-space:nowrap;"><span class="badge b-secondary">6 votes</span></td></tr>
+          </table></div>
+        </div>
+
+        <!-- reading list -->
+        <div class="pane" data-scope="leader" data-pane="list" hidden>
+          <div class="card" style="margin-bottom:1.3rem;">
+            <span class="badge b-secondary">Now reading</span>
+            <h4 style="margin:.6rem 0 .3rem;">Kintu — Jennifer Nansubuga Makumbi</h4>
+            <div class="bar-row"><span class="bar-label" style="width:11rem;">On chapter 5 or later</span><div class="bar"><span style="width:78%;"></span></div><span class="bar-label">14 / 18</span></div>
+          </div>
+          <h3 style="font-size:1.1rem;">Propose the next book</h3>
+          <div class="field" style="max-width:420px;"><input placeholder="Search a title to propose…" /></div>
+          <h4 style="font-size:.92rem;">Current votes</h4>
+          <div style="margin-bottom:.5rem;"><div class="bar-row"><span style="font-size:.82rem; width:9.5rem;">The First Woman</span><div class="bar"><span style="width:78%;"></span></div><span class="bar-label">14</span></div></div>
+          <div style="margin-bottom:1.3rem;"><div class="bar-row"><span style="font-size:.82rem; width:9.5rem;">Tropical Fish</span><div class="bar b-sec"><span style="width:22%;"></span></div><span class="bar-label">4</span></div></div>
+          <h4 style="font-size:.92rem;">Previously read</h4>
+          <div class="table-wrap"><table>
+            <tr><td>Secrets No More — G. Kyomuhendo</td><td style="color:var(--ink-soft); white-space:nowrap;">Jul 2025</td></tr>
+            <tr><td>Waiting — G. Kyomuhendo</td><td style="color:var(--ink-soft); white-space:nowrap;">Apr 2025</td></tr>
+          </table></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= SCHOOL ADMIN ======================= -->
+<section class="scenario" id="sc-school" hidden>
+  <div class="wrap">
+    <div class="scenario-head">
+      <span class="eyebrow">Kitabo Kids · school partnership</span>
+      <h1 style="font-size:1.8rem;">Running the program from the school side</h1>
+      <p class="lede">A head teacher or program coordinator's view: the library they've uploaded, the seats they've bought, and the credit system nudging every finished book into a bit of writing.</p>
+    </div>
+    <div class="dash">
+      <div class="dash-side">
+        <div class="org">Green Hill Primary</div>
+        <nav>
+          <button aria-selected="true" onclick="setPane('school','overview')">Overview</button>
+          <button aria-selected="false" onclick="setPane('school','library')">Library &amp; materials</button>
+          <button aria-selected="false" onclick="setPane('school','students')">Students</button>
+          <button aria-selected="false" onclick="setPane('school','subscription')">Subscription &amp; seats</button>
+          <button aria-selected="false" onclick="setPane('school','assignments')">Assignments</button>
+          <button aria-selected="false" onclick="setPane('school','reports')">Reports</button>
+        </nav>
+        <a class="back" href="#" onclick="showScenario('onboarding'); return false;">← Back</a>
+      </div>
+      <div class="dash-main">
+
+        <!-- overview -->
+        <div class="pane" data-scope="school" data-pane="overview">
+          <div class="grid g4" style="margin-bottom:1.5rem;">
+            <div class="card stat"><b>42 / 50</b><span>Student seats used</span></div>
+            <div class="card stat"><b>310</b><span>Books completed this term</span></div>
+            <div class="card stat"><b>65</b><span>Avg. credits / student</span></div>
+            <div class="card stat"><b>7</b><span>Assignments awaiting review</span></div>
+          </div>
+          <div class="alert" style="margin-bottom:1.5rem;">
+            <span class="alert-dot"></span>
+            <div><strong style="font-size:.86rem;">8 seats remaining this term.</strong><p style="margin:.2rem 0 0; font-size:.82rem;">You can add more any time from Subscription &amp; seats.</p></div>
+          </div>
+          <h3 style="font-size:1.1rem;">Recent activity</h3>
+          <div class="table-wrap"><table>
+            <tr><td>P.6 Blue finished "The Boy Who Harnessed the Wind" — 24 recaps submitted</td><td style="color:var(--ink-soft); white-space:nowrap;">Today</td></tr>
+            <tr><td>3 students redeemed the 100-credit sticker pack</td><td style="color:var(--ink-soft); white-space:nowrap;">Yesterday</td></tr>
+            <tr><td>New material uploaded: "Akello and the Rain"</td><td style="color:var(--ink-soft); white-space:nowrap;">3 days ago</td></tr>
+          </table></div>
+        </div>
+
+        <!-- library -->
+        <div class="pane" data-scope="school" data-pane="library" hidden>
+          <div class="grid g2" style="align-items:start; margin-bottom:1.5rem;">
+            <div class="card">
+              <h3 style="font-size:1rem;">Upload material</h3>
+              <div class="field"><label>Title</label><input placeholder="e.g. Akello and the Rain" /></div>
+              <div class="field"><label>Author</label><input placeholder="Author name" /></div>
+              <div class="field"><label>Level</label><select><option>Lower Primary (P.1–P.3)</option><option>Upper Primary (P.4–P.7)</option></select></div>
+              <div class="field"><label>Language</label><select><option>English</option><option>Luganda</option><option>Other</option></select></div>
+              <div class="field"><label>File or link</label><input placeholder="Upload PDF or paste a link" /></div>
+              <button class="btn btn-primary btn-block">Add to library</button>
+            </div>
+            <div>
+              <h3 style="font-size:1rem;">In your library</h3>
+              <div class="grid g2">
+                <div class="card"><div class="book-cover" style="height:80px; background:var(--secondary-tint);"></div><h5 style="margin:.4rem 0 0; font-size:.82rem;">The Boy Who Harnessed the Wind</h5><span style="font-size:.7rem; color:var(--ink-soft);">Upper Primary · English</span></div>
+                <div class="card"><div class="book-cover" style="height:80px; background:var(--accent-tint);"></div><h5 style="margin:.4rem 0 0; font-size:.82rem;">Akello and the Rain</h5><span style="font-size:.7rem; color:var(--ink-soft);">Lower Primary · Luganda</span></div>
+                <div class="card"><div class="book-cover" style="height:80px; background:var(--primary-tint);"></div><h5 style="margin:.4rem 0 0; font-size:.82rem;">Sarah and the Fisherman</h5><span style="font-size:.7rem; color:var(--ink-soft);">Lower Primary · English</span></div>
+                <div class="card"><div class="book-cover" style="height:80px; background:var(--lake-tint);"></div><h5 style="margin:.4rem 0 0; font-size:.82rem;">Tales by Moonlight</h5><span style="font-size:.7rem; color:var(--ink-soft);">Upper Primary · English</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- students -->
+        <div class="pane" data-scope="school" data-pane="students" hidden>
+          <div style="display:flex; gap:.6rem; margin-bottom:1rem; flex-wrap:wrap;">
+            <input class="field" style="margin:0; flex:1; min-width:180px;" placeholder="Search students…" />
+            <select class="field" style="margin:0; width:auto;"><option>All classes</option><option>P.4</option><option>P.5</option><option>P.6</option></select>
+          </div>
+          <div class="table-wrap"><table>
+            <tr><th>Name</th><th>Class</th><th>Books completed</th><th>Credits</th><th>Last active</th><th>Reward status</th></tr>
+            <tr><td>Nakato P.</td><td>P.6 Blue</td><td>6</td><td>128</td><td>Today</td><td>—</td></tr>
+            <tr><td>Okello D.</td><td>P.6 Blue</td><td>9</td><td>205</td><td>Today</td><td><span class="badge b-secondary">Free book</span></td></tr>
+            <tr><td>Amito S.</td><td>P.5 Green</td><td>4</td><td>102</td><td>Yesterday</td><td><span class="badge b-accent">Sticker pack</span></td></tr>
+            <tr><td>Kato J.</td><td>P.4 Red</td><td>3</td><td>60</td><td>3 days ago</td><td>—</td></tr>
+          </table></div>
+        </div>
+
+        <!-- subscription -->
+        <div class="pane" data-scope="school" data-pane="subscription" hidden>
+          <div class="card" style="margin-bottom:1.3rem;">
+            <span class="badge b-primary">Current plan</span>
+            <h3 style="margin:.6rem 0 .2rem;">Shule Starter — 50 student seats</h3>
+            <p style="font-size:.82rem; color:var(--ink-soft); margin-bottom:.9rem;">Billed per term · renews January 2027</p>
+            <div class="bar-row" style="margin-bottom:.3rem;"><div class="bar b-warn"><span style="width:84%;"></span></div><span class="bar-label">42 / 50 used</span></div>
+            <p style="font-size:.78rem; color:var(--ink-soft); margin:0;">Only 8 seats left this term.</p>
+          </div>
+          <div class="alert" style="margin-bottom:1.5rem;">
+            <span class="alert-dot"></span>
+            <div><strong style="font-size:.86rem;">You're close to your seat limit.</strong><p style="margin:.2rem 0 0; font-size:.82rem;">Upgrade before next term so new students aren't locked out mid-year.</p></div>
+          </div>
+          <h3 style="font-size:1.1rem;">Plans</h3>
+          <div class="grid g3" style="margin-bottom:1.5rem;">
+            <div class="card"><span class="badge b-primary">Current</span><h4 style="margin:.6rem 0 .2rem; font-size:1rem;">Shule Starter</h4><p style="font-size:.82rem; margin:0;">50 seats · included in base plan</p></div>
+            <div class="card" style="border-color:var(--secondary);"><span class="badge b-secondary">Recommended</span><h4 style="margin:.6rem 0 .2rem; font-size:1rem;">Shule Growth</h4><p style="font-size:.82rem; margin:0 0 .8rem;">150 seats · + UGX 400,000/term</p><button class="btn btn-secondary btn-sm btn-block">Upgrade</button></div>
+            <div class="card"><span class="badge b-accent">Premium</span><h4 style="margin:.6rem 0 .2rem; font-size:1rem;">Shule Plus</h4><p style="font-size:.82rem; margin:0 0 .8rem;">300+ seats · + UGX 900,000/term · printed sets, dedicated support</p><button class="btn btn-outline btn-sm btn-block">Talk to us</button></div>
+          </div>
+          <h3 style="font-size:1.1rem;">Or add seats à la carte</h3>
+          <div class="card" style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap; max-width:520px;">
+            <span style="font-size:.86rem; flex:1;">+10 extra seats — UGX 60,000/term</span>
+            <button class="btn btn-outline btn-sm">−</button>
+            <span style="font-weight:800;">1</span>
+            <button class="btn btn-outline btn-sm">+</button>
+            <button class="btn btn-primary btn-sm">Add seats</button>
+          </div>
+        </div>
+
+        <!-- assignments -->
+        <div class="pane" data-scope="school" data-pane="assignments" hidden>
+          <p class="lede" style="font-size:.88rem; margin-bottom:1.2rem;">Every finished book prompts a short assignment. Students choose Recap, Short Story, or Poem — each earns credits toward rewards.</p>
+          <div class="grid g4" style="margin-bottom:1.5rem;">
+            <div class="card stat" style="padding:.8rem;"><b>+10</b><span>Recap</span></div>
+            <div class="card stat" style="padding:.8rem;"><b>+25</b><span>Short story</span></div>
+            <div class="card stat" style="padding:.8rem;"><b>+20</b><span>Poem</span></div>
+            <div class="card stat" style="padding:.8rem;"><b>+15</b><span>Featured bonus</span></div>
+          </div>
+          <h3 style="font-size:1.1rem;">Review queue</h3>
+          <div class="table-wrap" style="margin-bottom:1.5rem;"><table>
+            <tr><th>Student</th><th>Book</th><th>Type</th><th>Status</th><th></th></tr>
+            <tr><td>Nakato P.</td><td>Sarah and the Fisherman</td><td>Poem</td><td><span class="badge b-lake">Pending</span></td><td><button class="btn btn-sm btn-outline">Review</button></td></tr>
+            <tr><td>Okello D.</td><td>The Boy Who Harnessed the Wind</td><td>Short story</td><td><span class="badge b-secondary">Approved</span></td><td><button class="btn btn-sm btn-outline">Feature</button></td></tr>
+            <tr><td>Amito S.</td><td>Akello and the Rain</td><td>Recap</td><td><span class="badge b-secondary">Approved</span></td><td><button class="btn btn-sm btn-outline">Feature</button></td></tr>
+          </table></div>
+          <h3 style="font-size:1.1rem;">Reward ladder</h3>
+          <div class="credit-ladder">
+            <div class="credit-step"><span class="num">100</span><span>Sticker pack &amp; certificate</span></div>
+            <div class="credit-step"><span class="num">200</span><span>Free book of their choice</span></div>
+            <div class="credit-step"><span class="num">350</span><span>+1 free month of household subscription</span></div>
+          </div>
+        </div>
+
+        <!-- reports -->
+        <div class="pane" data-scope="school" data-pane="reports" hidden>
+          <div class="section-title"><h3 style="font-size:1.1rem; margin:0;">Books completed this term, by class</h3><button class="btn btn-outline btn-sm">Download report</button></div>
+          <div style="margin-bottom:.6rem;"><div class="bar-row"><span style="font-size:.82rem; width:5rem;">P.4 Red</span><div class="bar"><span style="width:52%;"></span></div><span class="bar-label">78</span></div></div>
+          <div style="margin-bottom:.6rem;"><div class="bar-row"><span style="font-size:.82rem; width:5rem;">P.5 Green</span><div class="bar b-sec"><span style="width:68%;"></span></div><span class="bar-label">104</span></div></div>
+          <div style="margin-bottom:1.4rem;"><div class="bar-row"><span style="font-size:.82rem; width:5rem;">P.6 Blue</span><div class="bar b-warn"><span style="width:85%;"></span></div><span class="bar-label">128</span></div></div>
+          <p style="font-size:.82rem; color:var(--ink-soft);">Figures are illustrative for this concept.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= KIDS STUDENT APP ======================= -->
+<section class="scenario" id="sc-kidstudent" hidden>
+  <div class="wrap">
+    <div class="scenario-head">
+      <span class="eyebrow">Kitabo Kids · student app</span>
+      <h1 style="font-size:1.8rem; font-family:'Baloo 2',sans-serif;">What a finished book turns into</h1>
+      <p class="lede">The moment that matters most: a student closes a book and the app immediately offers a small, rewarded way to respond to it.</p>
+    </div>
+    <div class="phone-shell">
+      <div class="phone-screen">
+        <div class="phone-app-bar">
+          <strong id="kid-title" style="font-family:'Baloo 2',sans-serif; font-size:1.1rem;">Hi, Nakato</strong>
+        </div>
+        <div class="phone-body">
+
+          <!-- home -->
+          <div class="pane" data-scope="kidstudent" data-pane="home">
+            <div class="card" style="margin-bottom:1rem; background:var(--accent-tint); border:none;">
+              <span class="badge b-accent">Reading now</span>
+              <h4 style="margin:.5rem 0 .3rem; font-family:'Baloo 2',sans-serif;">Sarah and the Fisherman</h4>
+              <div class="bar-row"><div class="bar b-warn"><span style="width:90%;"></span></div><span class="bar-label">90%</span></div>
+            </div>
+            <div class="card" style="margin-bottom:1rem; text-align:center;">
+              <span style="font-size:.78rem; color:var(--ink-soft);">Your credits</span>
+              <div style="font-family:'Baloo 2',sans-serif; font-size:2rem; font-weight:800; color:var(--accent-strong);">128</div>
+              <div class="bar-row"><div class="bar b-warn"><span style="width:64%;"></span></div><span class="bar-label">200</span></div>
+              <span style="font-size:.72rem; color:var(--ink-soft);">72 credits to your next reward</span>
+            </div>
+            <h4 style="font-size:.88rem;">Your badges</h4>
+            <div class="grid g4">
+              <div class="card" style="text-align:center; padding:.6rem;"><div style="width:34px;height:34px;border-radius:50%;background:var(--accent);margin:0 auto .3rem;"></div><span style="font-size:.62rem;">First Chapter</span></div>
+              <div class="card" style="text-align:center; padding:.6rem;"><div style="width:34px;height:34px;border-radius:50%;background:var(--secondary);margin:0 auto .3rem;"></div><span style="font-size:.62rem;">Bookworm</span></div>
+              <div class="card" style="text-align:center; padding:.6rem; opacity:.4;"><div style="width:34px;height:34px;border-radius:50%;background:var(--lake);margin:0 auto .3rem;"></div><span style="font-size:.62rem;">Read-Aloud</span></div>
+              <div class="card" style="text-align:center; padding:.6rem; opacity:.4;"><div style="width:34px;height:34px;border-radius:50%;background:var(--primary);margin:0 auto .3rem;"></div><span style="font-size:.62rem;">Storyteller</span></div>
+            </div>
+          </div>
+
+          <!-- earn -->
+          <div class="pane" data-scope="kidstudent" data-pane="earn" hidden>
+            <div id="kid-earn-picker">
+              <div class="card" style="margin-bottom:1rem; background:var(--secondary-tint); border:none;">
+                <strong style="font-family:'Baloo 2',sans-serif;">You finished "Sarah and the Fisherman"!</strong>
+                <p style="font-size:.82rem; margin:.3rem 0 0;">Choose how you'd like to respond to earn credits.</p>
+              </div>
+              <button class="opt-card" onclick="pickPrompt('Short Recap', 10)">
+                <span class="opt-icon" style="background:var(--lake-tint);"></span>
+                <span><h4>Short Recap <span class="badge b-lake" style="margin-left:.3rem;">+10</span></h4><p>Two or three sentences on what happened.</p></span>
+              </button>
+              <button class="opt-card" onclick="pickPrompt('Short Story', 25)">
+                <span class="opt-icon" style="background:var(--primary-tint);"></span>
+                <span><h4>Short Story <span class="badge b-primary" style="margin-left:.3rem;">+25</span></h4><p>Write your own story inspired by the book.</p></span>
+              </button>
+              <button class="opt-card" onclick="pickPrompt('Poem', 20)">
+                <span class="opt-icon" style="background:var(--accent-tint);"></span>
+                <span><h4>Poem <span class="badge b-accent" style="margin-left:.3rem;">+20</span></h4><p>A poem about a character, place, or feeling.</p></span>
+              </button>
+            </div>
+            <div id="kid-earn-compose" hidden>
+              <p style="font-size:.84rem; margin-bottom:.6rem;">Writing a <strong id="kid-earn-type">Poem</strong> · <span id="kid-earn-credits" class="badge b-accent">+20</span> on submit</p>
+              <div class="field"><textarea placeholder="Start writing here…" style="min-height:8em;"></textarea></div>
+              <button class="btn btn-primary btn-block" onclick="submitPrompt()">Submit for credits</button>
+              <button class="btn btn-outline btn-block" style="margin-top:.5rem;" onclick="document.getElementById('kid-earn-picker').hidden=false; document.getElementById('kid-earn-compose').hidden=true;">Choose a different one</button>
+            </div>
+            <div id="kid-earn-done" hidden class="card" style="text-align:center; background:var(--secondary-tint); border:none;">
+              <strong style="font-family:'Baloo 2',sans-serif;">Submitted!</strong>
+              <p style="font-size:.84rem; margin:.4rem 0 0;">Your teacher will review it. Credits are added now, plus a bonus if it gets featured.</p>
+            </div>
+          </div>
+
+          <!-- rewards -->
+          <div class="pane" data-scope="kidstudent" data-pane="rewards" hidden>
+            <div class="card" style="margin-bottom:1.2rem; text-align:center;">
+              <span style="font-size:.78rem; color:var(--ink-soft);">128 of 200 credits</span>
+              <div class="bar-row" style="margin-top:.4rem;"><div class="bar b-warn"><span style="width:64%;"></span></div></div>
+              <span style="font-size:.72rem; color:var(--ink-soft);">→ Free book</span>
+            </div>
+            <h4 style="font-size:.88rem;">Reward ladder</h4>
+            <div class="credit-ladder" style="margin-bottom:1.2rem;">
+              <div class="credit-step"><span class="num">100</span><span>Sticker pack &amp; certificate</span></div>
+              <div class="credit-step" style="border-color:var(--accent);"><span class="num">200</span><span>Free book of your choice</span></div>
+              <div class="credit-step"><span class="num">350</span><span>+1 month free for your family</span></div>
+            </div>
+            <h4 style="font-size:.88rem;">Redeemed</h4>
+            <p style="font-size:.82rem; color:var(--ink-soft);">Sticker pack — redeemed Aug 2026</p>
+          </div>
+
+        </div>
+        <div class="phone-tabbar">
+          <button class="pane-btn" data-scope="kidstudent" data-pane="home" aria-selected="true" onclick="setPane('kidstudent','home'); document.getElementById('kid-title').textContent='Hi, Nakato';"><span class="dot"></span>Home</button>
+          <button class="pane-btn" data-scope="kidstudent" data-pane="earn" aria-selected="false" onclick="setPane('kidstudent','earn'); document.getElementById('kid-title').textContent='Write &amp; Earn';"><span class="dot"></span>Write &amp; Earn</button>
+          <button class="pane-btn" data-scope="kidstudent" data-pane="rewards" aria-selected="false" onclick="setPane('kidstudent','rewards'); document.getElementById('kid-title').textContent='Rewards';"><span class="dot"></span>Rewards</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <span>Kitabo Circles — concept product prototype for Ugandan reading &amp; writing communities.</span>
+    <span>Illustrative names, figures and pricing throughout.</span>
+  </div>
+</footer>
+
+<script>
+  var SCENARIOS = ['onboarding','reader','member','leader','school','kidstudent'];
+
+  function showScenario(name) {
+    SCENARIOS.forEach(function (s) {
+      var el = document.getElementById('sc-' + s);
+      if (el) el.hidden = (s !== name);
+    });
+    document.querySelectorAll('#topnav button').forEach(function (b) {
+      b.setAttribute('aria-selected', b.dataset.scenario === name ? 'true' : 'false');
+    });
+    try { localStorage.setItem('kitabo-scenario', name); } catch (e) {}
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  function setPane(scope, name) {
+    document.querySelectorAll('.pane[data-scope="' + scope + '"]').forEach(function (p) {
+      p.hidden = p.dataset.pane !== name;
+    });
+    document.querySelectorAll('.pane-btn[data-scope="' + scope + '"]').forEach(function (b) {
+      b.setAttribute('aria-selected', b.dataset.pane === name ? 'true' : 'false');
+    });
+    document.querySelectorAll('.dash-side nav button').forEach(function (b) {
+      if (b.closest('.dash-side') && b.getAttribute('onclick') && b.getAttribute('onclick').indexOf("'" + scope + "','" + name + "'") !== -1) {
+        b.parentElement.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-selected', 'false'); });
+        b.setAttribute('aria-selected', 'true');
+      }
+    });
+  }
+
+  function jump(scenario, scope, pane) {
+    showScenario(scenario);
+    if (scope && pane) setPane(scope, pane);
+  }
+
+  function pickPrompt(type, credits) {
+    document.getElementById('kid-earn-type').textContent = type;
+    document.getElementById('kid-earn-credits').textContent = '+' + credits;
+    document.getElementById('kid-earn-picker').hidden = true;
+    document.getElementById('kid-earn-compose').hidden = false;
+    document.getElementById('kid-earn-done').hidden = true;
+  }
+
+  function submitPrompt() {
+    document.getElementById('kid-earn-compose').hidden = true;
+    document.getElementById('kid-earn-done').hidden = false;
+  }
+
+  (function () {
+    var initial = 'onboarding';
+    var fromHash = window.location.hash.replace('#', '');
+    if (fromHash && SCENARIOS.indexOf(fromHash) !== -1) {
+      initial = fromHash;
+    } else {
+      try {
+        var saved = localStorage.getItem('kitabo-scenario');
+        if (saved && SCENARIOS.indexOf(saved) !== -1) initial = saved;
+      } catch (e) {}
+    }
+    if (initial !== 'onboarding') showScenario(initial);
+  })();
+</script>
+
+</body>
+</html>

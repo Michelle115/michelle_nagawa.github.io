@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign up — Kitabo Circles</title>
+<meta name="description" content="Create your Kitabo Circles account.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Literata:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><span class="brand-mark"></span> Kitabo Circles</a>
+    <div class="nav-cta"><span class="lede" style="font-size:var(--text-sm); margin:0;">Have an account?</span><a class="btn btn-outline" href="login.html">Log in</a></div>
+  </div>
+</nav>
+<div class="pattern-divider"></div>
+
+<div class="auth-shell">
+  <div class="auth-card">
+
+    <div id="signup-form-state">
+      <span class="brand"><span class="brand-mark"></span></span>
+      <p class="eyebrow text-center" id="su-eyebrow" style="display:block; text-align:center;">Create your account</p>
+      <h2 class="text-center" id="su-title" style="font-size:var(--text-2xl);">Create your account</h2>
+      <p class="lede text-center" id="su-subtitle" style="margin:0 auto var(--space-6); max-width:34ch;">Join Kitabo Circles — reading together, writing our own story.</p>
+
+      <form id="su-form">
+        <div class="field">
+          <label for="su-name">Full name</label>
+          <input id="su-name" type="text" placeholder="e.g. Achen Nabirye" required>
+        </div>
+        <div class="field">
+          <label for="su-email">Email</label>
+          <input id="su-email" type="email" placeholder="you@example.com" required>
+        </div>
+        <div class="field">
+          <label for="su-phone">Phone number</label>
+          <input id="su-phone" type="tel" placeholder="07XX XXX XXX">
+          <span class="field-hint">Used for MTN/Airtel Mobile Money and SMS reminders — optional.</span>
+        </div>
+        <div class="field" id="su-extra-field" hidden>
+          <label for="su-extra" id="su-extra-label">Extra field</label>
+          <input id="su-extra" type="text">
+        </div>
+        <div class="field" id="su-extra2-field" hidden>
+          <label for="su-extra2" id="su-extra2-label">Extra field 2</label>
+          <input id="su-extra2" type="text">
+        </div>
+        <div class="field">
+          <label for="su-password">Password</label>
+          <input id="su-password" type="password" placeholder="At least 8 characters" required>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="su-terms" required>
+          <label for="su-terms">I agree to the Kitabo Circles Terms and Privacy Policy.</label>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" style="width:100%; justify-content:center;" id="su-submit">Create account</button>
+      </form>
+
+      <p class="auth-foot">Already reading with us? <a href="login.html">Log in</a></p>
+    </div>
+
+    <div id="signup-success-state" class="auth-success" hidden>
+      <span class="brand-mark" style="display:block;"></span>
+      <span class="eyebrow">You're in</span>
+      <h2 id="ss-title" style="font-size:var(--text-2xl);">Welcome to Kitabo Circles</h2>
+      <p class="lede" id="ss-body" style="margin:0 auto var(--space-6); max-width:34ch;">Your account has been created.</p>
+      <a class="btn btn-primary btn-lg" style="width:100%; justify-content:center;" id="ss-continue" href="get-started.html">Continue</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  var PATHS = {
+    'start-club': {
+      title: 'Start your book club', extraLabel: 'Club name', extraPlaceholder: 'e.g. Kampala Sunrise Readers',
+      cta: 'Create my club', continueHref: 'app-prototype.html#leader',
+      successBody: "Your club is ready to set up. Next, name your first book and share your invite link with readers."
+    },
+    'join-club': {
+      title: 'Join a book club', extraLabel: 'Invite code', extraPlaceholder: 'e.g. KSR-7F2Q',
+      cta: 'Join the circle', continueHref: 'app-prototype.html#member',
+      successBody: "You're in the circle — head to the discussion tab to say hello."
+    },
+    'track-reading': {
+      title: 'Track your reading',
+      cta: 'Start tracking', continueHref: 'app-prototype.html#reader',
+      successBody: "Your reading home base is ready — add the book you're on now."
+    },
+    'discover': {
+      title: 'Discover your next read',
+      cta: 'Browse books', continueHref: 'app-prototype.html#reader',
+      successBody: "Let's find your next read — curated Ugandan and East African picks are waiting."
+    },
+    'school-admin': {
+      title: 'Set up Kitabo Kids for your school', extraLabel: 'School name', extraPlaceholder: 'e.g. Green Hill Primary',
+      cta: 'Set up my school', continueHref: 'app-prototype.html#school',
+      successBody: "Your school workspace is ready. Next, upload your first reading materials and invite students."
+    },
+    'student': {
+      title: 'Join your class', extraLabel: 'Class join code', extraPlaceholder: 'e.g. GHP-P6-2026',
+      extraLabel2: 'Parent / guardian email', extraPlaceholder2: 'parent@example.com',
+      cta: 'Join my class', continueHref: 'app-prototype.html#kidstudent',
+      successBody: "Welcome! Your teacher will confirm your class, and your reading passport is ready."
+    }
+  };
+
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    var path = params.get('path');
+    var cfg = PATHS[path];
+
+    if (cfg) {
+      document.getElementById('su-title').textContent = cfg.title;
+      document.getElementById('su-eyebrow').textContent = 'Almost there';
+      document.getElementById('su-subtitle').textContent = "Just a few details, then you're straight in.";
+      document.getElementById('su-submit').textContent = cfg.cta;
+      if (cfg.extraLabel) {
+        document.getElementById('su-extra-field').hidden = false;
+        document.getElementById('su-extra-label').textContent = cfg.extraLabel;
+        document.getElementById('su-extra').placeholder = cfg.extraPlaceholder || '';
+        document.getElementById('su-extra').required = true;
+      }
+      if (cfg.extraLabel2) {
+        document.getElementById('su-extra2-field').hidden = false;
+        document.getElementById('su-extra2-label').textContent = cfg.extraLabel2;
+        document.getElementById('su-extra2').placeholder = cfg.extraPlaceholder2 || '';
+      }
+    }
+
+    document.getElementById('su-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name = document.getElementById('su-name').value.trim() || 'there';
+      var firstName = name.split(' ')[0];
+      document.getElementById('signup-form-state').hidden = true;
+      document.getElementById('signup-success-state').hidden = false;
+      document.getElementById('ss-title').textContent = 'Welcome, ' + firstName + '!';
+      document.getElementById('ss-body').textContent = cfg ? cfg.successBody : "Now let's pick what brings you here.";
+      document.getElementById('ss-continue').href = cfg ? cfg.continueHref : 'get-started.html';
+      document.getElementById('ss-continue').textContent = cfg ? 'Continue' : 'Choose your path';
+    });
+  })();
+</script>
+
+</body>
+</html>
