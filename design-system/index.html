@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kitabu Circles — Design System</title>
+<meta name="description" content="Design system for Kitabu Circles: a Ugandan book-club, children's literacy, and young-writers platform.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Literata:wght@400;500;600&family=Manrope:wght@500;600;700;800&family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><span class="brand-mark"></span> Kitabu Circles</a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Design System</a></li>
+      <li><a href="home.html">Home Concept</a></li>
+      <li><a href="kids.html">Kitabu Kids</a></li>
+      <li><a href="writing.html">Kitabu Voices</a></li>
+    </ul>
+    <div class="nav-cta"><a class="btn btn-primary" href="home.html">View Prototype</a></div>
+  </div>
+</nav>
+<div class="pattern-divider"></div>
+
+<header class="hero">
+  <div class="container">
+    <span class="eyebrow">Design System · v1.0</span>
+    <h1>Kitabu Circles</h1>
+    <p class="lede max-w-sm">A brand and design language built for Ugandan reading communities — extracted and reimagined from Michelle Nagawa's academic portfolio, then redirected toward a warm, book-club identity for readers, schools, and young writers across Uganda.</p>
+  </div>
+</header>
+
+<section class="section-alt">
+  <div class="container">
+    <span class="eyebrow">Where this came from</span>
+    <h2>Extracted from the source site</h2>
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>Original system</h3>
+        <p>The existing portfolio (a Jekyll "minimal‑mistakes"‑style academic theme) uses a restrained, monochrome palette — <code>#333332</code> body text, <code>#111</code>/<code>#343434</code> accents, a single red highlight (<code>#CC0000</code>) — paired with <strong>PT Serif</strong> for body copy and <strong>PT Sans Narrow</strong> for headings on a fixed <code>16px</code>/<code>30px</code> type rhythm. It reads as academic, quiet, and CV-first.</p>
+      </div>
+      <div class="card">
+        <h3>What carries over</h3>
+        <p>We keep the same <em>bones</em>: a serif for long-form reading, a distinct sans for UI, a single accent color used sparingly, and a modular type scale. What changes is the palette and voice — trading grayscale-and-red for warm terracotta, banana-leaf green, and golden savanna tones, built for a community reading brand rather than a personal résumé.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <span class="eyebrow">Foundations</span>
+    <h2>Color palette</h2>
+    <p class="lede max-w-sm">Rooted in Uganda's landscape — red earth, banana leaves, Lake Victoria, and savanna gold — kept warm and print-like rather than literal or flag-coded.</p>
+    <div class="grid grid-4" style="margin-top: var(--space-6);">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#c9531f"></div>
+        <div class="swatch-info"><div class="swatch-name">Terracotta (Primary)</div><div class="swatch-hex">#C9531F</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#1f6e4a"></div>
+        <div class="swatch-info"><div class="swatch-name">Banana-leaf Green</div><div class="swatch-hex">#1F6E4A</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#f0b429"></div>
+        <div class="swatch-info"><div class="swatch-name">Savanna Gold (Accent)</div><div class="swatch-hex">#F0B429</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#1c6f9c"></div>
+        <div class="swatch-info"><div class="swatch-name">Lake Blue</div><div class="swatch-hex">#1C6F9C</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#211b18"></div>
+        <div class="swatch-info"><div class="swatch-name">Ink</div><div class="swatch-hex">#211B18</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#fbf3e6"></div>
+        <div class="swatch-info"><div class="swatch-name">Paper</div><div class="swatch-hex">#FBF3E6</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#f3e4cc"></div>
+        <div class="swatch-info"><div class="swatch-name">Paper Alt</div><div class="swatch-hex">#F3E4CC</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#8a7c68"></div>
+        <div class="swatch-info"><div class="swatch-name">Gray 500</div><div class="swatch-hex">#8A7C68</div></div>
+      </div>
+    </div>
+    <p style="margin-top:var(--space-5)"><strong>Usage:</strong> Terracotta drives primary actions across the whole brand. Green signals growth/community (schools, progress). Gold is reserved for the children's sub-brand and celebratory moments (badges, awards). Lake blue is for links and informational states only.</p>
+  </div>
+</section>
+
+<section class="section-alt">
+  <div class="container">
+    <span class="eyebrow">Foundations</span>
+    <h2>Typography</h2>
+    <div class="grid grid-3">
+      <div class="card">
+        <div class="eyebrow" style="color:var(--secondary-dark)">Display</div>
+        <p style="font-family: var(--font-display); font-size: var(--text-2xl); font-weight:600;">Fraunces</p>
+        <p>Headlines, section titles. Warm, editorial serif with character — used italic for the Kitabu Voices writing brand.</p>
+      </div>
+      <div class="card">
+        <div class="eyebrow" style="color:var(--secondary-dark)">Body / Reading</div>
+        <p style="font-family: var(--font-body); font-size: var(--text-2xl); font-weight:500;">Literata</p>
+        <p>Designed for on-screen reading — long-form copy, book excerpts, submitted stories and poems.</p>
+      </div>
+      <div class="card">
+        <div class="eyebrow" style="color:var(--secondary-dark)">UI / Sans</div>
+        <p style="font-family: var(--font-ui); font-size: var(--text-2xl); font-weight:700;">Manrope</p>
+        <p>Navigation, buttons, forms, labels, badges. Clean and legible on low-bandwidth mobile connections.</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:var(--space-5)">
+      <div class="eyebrow" style="color:var(--accent-dark)">Playful (Kitabu Kids only)</div>
+      <p style="font-family: var(--font-playful); font-size: var(--text-2xl); font-weight:700;">Baloo 2 — for headings in the children's program</p>
+    </div>
+
+    <h3 style="margin-top:var(--space-8)">Type scale</h3>
+    <div class="type-row"><span style="font-size:var(--text-4xl); font-family:var(--font-display)">Aa Kitabu</span><span class="type-meta">4xl / 60px — hero</span></div>
+    <div class="type-row"><span style="font-size:var(--text-3xl); font-family:var(--font-display)">Aa Kitabu</span><span class="type-meta">3xl / 48px — h1</span></div>
+    <div class="type-row"><span style="font-size:var(--text-2xl); font-family:var(--font-display)">Aa Kitabu</span><span class="type-meta">2xl / 36px — h2</span></div>
+    <div class="type-row"><span style="font-size:var(--text-xl); font-family:var(--font-display)">Aa Kitabu</span><span class="type-meta">xl / 28px — h3</span></div>
+    <div class="type-row"><span style="font-size:var(--text-lg)">Aa Kitabu</span><span class="type-meta">lg / 22px — lede</span></div>
+    <div class="type-row"><span style="font-size:var(--text-md)">Aa Kitabu</span><span class="type-meta">md / 18px — body large</span></div>
+    <div class="type-row"><span style="font-size:var(--text-base)">Aa Kitabu</span><span class="type-meta">base / 16px — body</span></div>
+    <div class="type-row"><span style="font-size:var(--text-sm)">Aa Kitabu</span><span class="type-meta">sm / 14px — captions, UI</span></div>
+    <div class="type-row"><span style="font-size:var(--text-xs)">Aa Kitabu</span><span class="type-meta">xs / 12px — eyebrows, meta</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <span class="eyebrow">Components</span>
+    <h2>Buttons &amp; badges</h2>
+    <div class="flex gap-3 wrap">
+      <a class="btn btn-primary" href="#">Join a Circle</a>
+      <a class="btn btn-secondary" href="#">Partner Your School</a>
+      <a class="btn btn-accent" href="#">Enter a Story</a>
+      <a class="btn btn-outline" href="#">Learn More</a>
+    </div>
+    <div class="flex gap-3 wrap" style="margin-top:var(--space-5)">
+      <span class="badge badge-primary">New Release</span>
+      <span class="badge badge-secondary">School Partner</span>
+      <span class="badge badge-accent">Reading Badge</span>
+      <span class="badge badge-lake">Open for Entries</span>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt">
+  <div class="container">
+    <span class="eyebrow">Components</span>
+    <h2>Cards</h2>
+    <div class="grid grid-3">
+      <div class="card card-hover">
+        <span class="badge badge-primary">Subscription</span>
+        <h3 style="margin-top:var(--space-3)">Msomaji Plan</h3>
+        <p>For the individual reader. One curated book a month plus your local circle's discussion guide.</p>
+      </div>
+      <div class="card card-hover">
+        <span class="badge badge-accent">Kitabu Kids</span>
+        <h3 style="margin-top:var(--space-3)">Reading Passport</h3>
+        <p>A badge-based reading log that turns finishing books into a collectible journey for children.</p>
+      </div>
+      <div class="card card-hover">
+        <span class="badge badge-lake">Kitabu Voices</span>
+        <h3 style="margin-top:var(--space-3)">Short Story Track</h3>
+        <p>Open to writers 11–18. Mentor feedback, shortlisting, and publication in the annual anthology.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <span class="eyebrow">Sub-brands</span>
+    <h2>Three tones, one family</h2>
+    <div class="grid grid-3">
+      <div class="card">
+        <h3>Kitabu Circles</h3>
+        <p>The parent brand: adult &amp; family book clubs, subscriptions, community circles. Terracotta + green, editorial serif.</p>
+        <a href="home.html">View home concept →</a>
+      </div>
+      <div class="theme-kids card" style="border:none;">
+        <h3>Kitabu Kids</h3>
+        <p>Children's literacy &amp; school partnerships. Gold + sky blue, rounded playful headings.</p>
+        <a href="kids.html">View Kitabu Kids →</a>
+      </div>
+      <div class="theme-writing card" style="border:none;">
+        <h3>Kitabu Voices</h3>
+        <p>The young writers' competition. Ink + parchment, italic literary display type.</p>
+        <a href="writing.html">View Kitabu Voices →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-bottom">
+    <span>Kitabu Circles Design System — concept brand for Ugandan reading &amp; writing communities.</span>
+    <span>Prototype, not a live product.</span>
+  </div>
+</footer>
+
+</body>
+</html>
