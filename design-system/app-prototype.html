@@ -348,6 +348,7 @@
           <p class="lede" style="text-align:center; margin:0 auto 1.4rem; max-width:34ch; font-size:.88rem;" id="su-subtitle">Just a few details, then you're straight in.</p>
           <form id="su-form">
             <div class="field"><label>Full name</label><input id="su-name" type="text" placeholder="e.g. Achen Nabirye" required></div>
+            <div class="field"><label>Username</label><input id="su-username" type="text" placeholder="e.g. achen.n" required></div>
             <div class="field"><label>Email</label><input id="su-email" type="email" placeholder="you@example.com" required></div>
             <div class="field"><label>Phone number</label><input id="su-phone" type="tel" placeholder="07XX XXX XXX"></div>
             <div class="field" id="su-extra-field" hidden><label id="su-extra-label">Extra field</label><input id="su-extra" type="text"></div>
@@ -383,7 +384,7 @@
           <h2>Log in</h2>
           <p class="lede" style="text-align:center; margin:0 auto 1.4rem; max-width:34ch; font-size:.88rem;">Log in to your reading circles, your progress, and your Kitabo Kids account.</p>
           <form id="li-form">
-            <div class="field"><label>Email</label><input id="li-email" type="email" placeholder="you@example.com" required></div>
+            <div class="field"><label>Username or email</label><input id="li-email" type="text" placeholder="achen.n or you@example.com" required></div>
             <div class="field"><label>Password</label><input id="li-password" type="password" placeholder="Your password" required></div>
             <p style="margin:-0.4rem 0 1rem;"><a href="#" onclick="return false;" style="font-size:.8rem;">Forgot password?</a></p>
             <button type="submit" class="btn btn-primary btn-block">Log in</button>
@@ -434,19 +435,45 @@
             <div class="card" style="margin-bottom:1.2rem;">
               <span class="badge b-primary">This month's pick</span>
               <h4 style="margin-top:.6rem; font-size:1rem;">Kintu</h4>
-              <p style="font-size:.82rem; color:var(--ink-soft); margin-bottom:.7rem;">Jennifer Nansubuga Makumbi · Fiction</p>
-              <button class="btn btn-primary btn-sm">Add to reading list</button>
+              <p style="font-size:.82rem; color:var(--ink-soft); margin-bottom:.5rem;">Jennifer Nansubuga Makumbi · Fiction</p>
+              <p style="font-size:.82rem; margin-bottom:.8rem;">A curse laid on a Buganda clan head in 1750 ripples through six of his descendants in the present day — a sprawling family saga that doubles as a history of Uganda itself.</p>
+              <div class="btn-row" style="margin-bottom:.6rem;">
+                <button class="btn btn-primary btn-sm">Add to reading list</button>
+                <a class="btn btn-outline btn-sm" href="#" onclick="return false;">Buy · UGX 42,000</a>
+              </div>
+              <span class="badge b-secondary">Available to rent from Kitabo Circles</span>
             </div>
             <div class="section-title"><h4 style="font-size:.88rem; margin:0;">Ugandan &amp; East African authors</h4></div>
-            <div class="shelf" style="margin-bottom:1.2rem;">
-              <div class="book-tile"><div class="book-cover" style="background:var(--primary-tint);"></div><h5>The First Woman</h5><span>J. N. Makumbi</span></div>
-              <div class="book-tile"><div class="book-cover" style="background:var(--secondary-tint);"></div><h5>Tropical Fish</h5><span>Doreen Baingana</span></div>
-              <div class="book-tile"><div class="book-cover" style="background:var(--lake-tint);"></div><h5>Waiting</h5><span>Goretti Kyomuhendo</span></div>
+            <div class="shelf" style="margin-bottom:1rem;">
+              <button class="book-tile" style="text-align:left; background:none; border:none; padding:0; cursor:pointer;" onclick="showBookDetail('first-woman')"><div class="book-cover" style="background:var(--primary-tint);"></div><h5>The First Woman</h5><span>J. N. Makumbi</span></button>
+              <button class="book-tile" style="text-align:left; background:none; border:none; padding:0; cursor:pointer;" onclick="showBookDetail('tropical-fish')"><div class="book-cover" style="background:var(--secondary-tint);"></div><h5>Tropical Fish</h5><span>Doreen Baingana</span></button>
+              <button class="book-tile" style="text-align:left; background:none; border:none; padding:0; cursor:pointer;" onclick="showBookDetail('waiting')"><div class="book-cover" style="background:var(--lake-tint);"></div><h5>Waiting</h5><span>Goretti Kyomuhendo</span></button>
             </div>
             <div class="section-title"><h4 style="font-size:.88rem; margin:0;">Trending in circles</h4></div>
-            <div class="shelf">
-              <div class="book-tile"><div class="book-cover" style="background:var(--accent-tint);"></div><h5>Kintu</h5><span>J. N. Makumbi</span></div>
-              <div class="book-tile"><div class="book-cover" style="background:var(--primary-tint);"></div><h5>Secrets No More</h5><span>G. Kyomuhendo</span></div>
+            <div class="shelf" style="margin-bottom:1rem;">
+              <button class="book-tile" style="text-align:left; background:none; border:none; padding:0; cursor:pointer;" onclick="showBookDetail('kintu')"><div class="book-cover" style="background:var(--accent-tint);"></div><h5>Kintu</h5><span>J. N. Makumbi</span></button>
+              <button class="book-tile" style="text-align:left; background:none; border:none; padding:0; cursor:pointer;" onclick="showBookDetail('secrets-no-more')"><div class="book-cover" style="background:var(--primary-tint);"></div><h5>Secrets No More</h5><span>G. Kyomuhendo</span></button>
+            </div>
+
+            <div class="card" id="book-detail" hidden style="margin-bottom:1.2rem;">
+              <div class="section-title" style="margin-bottom:.4rem;"><h4 id="bd-title" style="margin:0; font-size:1rem;"></h4><button class="btn btn-outline btn-sm" onclick="document.getElementById('book-detail').hidden=true;">✕</button></div>
+              <p id="bd-author" style="font-size:.78rem; color:var(--ink-soft); margin-bottom:.5rem;"></p>
+              <p id="bd-blurb" style="font-size:.82rem; margin-bottom:.8rem;"></p>
+              <div class="btn-row" style="margin-bottom:.6rem;">
+                <button class="btn btn-primary btn-sm">Add to reading list</button>
+                <a class="btn btn-outline btn-sm" id="bd-buy" href="#" onclick="return false;"></a>
+              </div>
+              <span class="badge" id="bd-rent"></span>
+            </div>
+
+            <div class="section-title"><h4 style="font-size:.88rem; margin:0;">From the community shelf</h4></div>
+            <p style="font-size:.76rem; color:var(--ink-soft); margin-top:-.4rem;">Original stories and poems published by fellow readers.</p>
+            <div id="community-shelf-list">
+              <div class="card" style="margin-bottom:.6rem;">
+                <span class="badge b-lake">Short story</span>
+                <h5 style="margin:.4rem 0 .2rem; font-size:.85rem;">The Boda Man's Radio</h5>
+                <p style="font-size:.78rem; color:var(--ink-soft); margin:0;">by Tendo K. — "Every morning, Musa tuned his radio to a station that hadn't existed in ten years…"</p>
+              </div>
             </div>
           </div>
 
@@ -471,7 +498,29 @@
             <p style="font-size:.82rem; margin:0 0 .3rem;">The First Woman — J. N. Makumbi</p>
             <p style="font-size:.82rem; color:var(--ink-soft); margin-bottom:1rem;">Tropical Fish: Tales from Entebbe — D. Baingana</p>
             <h4 style="font-size:.85rem;">Recently finished</h4>
-            <p style="font-size:.82rem; margin:0;">Secrets No More — G. Kyomuhendo</p>
+            <p style="font-size:.82rem; margin:0 0 1.2rem;">Secrets No More — G. Kyomuhendo</p>
+
+            <div class="card" style="margin-bottom:1.2rem;">
+              <h4 style="font-size:.9rem;">My notes — Kintu</h4>
+              <p style="font-size:.76rem; color:var(--ink-soft); margin-bottom:.6rem;">Private to you. Jot a thought while it's fresh.</p>
+              <div class="field" style="margin-bottom:.5rem;"><textarea id="note-input" placeholder="e.g. Kamu's silence at the funeral says more than any line of dialogue…" style="min-height:3.5em;"></textarea></div>
+              <button class="btn btn-outline btn-sm" onclick="addNote()">Save note</button>
+              <div id="note-list" style="margin-top:.9rem;">
+                <div class="card" style="padding:.6rem .8rem; margin-bottom:.5rem;">
+                  <p style="font-size:.68rem; color:var(--ink-soft); margin:0 0 .2rem;">Ch. 4 · Tue</p>
+                  <p style="font-size:.82rem; margin:0;">The house in Bwaise feels like its own character — worth re-reading that paragraph.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="background:var(--primary-tint); border:none;">
+              <h4 style="font-size:.9rem;">Write your own story</h4>
+              <p style="font-size:.76rem; color:var(--ink-soft); margin-bottom:.7rem;">Publish a short story or poem to the Kitabo Circles community shelf — anyone browsing Discover can find it.</p>
+              <div class="field" style="margin-bottom:.5rem;"><input id="story-title" placeholder="Give it a title…"></div>
+              <div class="field" style="margin-bottom:.6rem;"><textarea id="story-body" placeholder="Start writing here…" style="min-height:6em;"></textarea></div>
+              <button class="btn btn-primary btn-sm" onclick="publishStory()">Publish to Kitabo Circles</button>
+              <div id="story-list" style="margin-top:1rem;"></div>
+            </div>
           </div>
 
           <!-- Clubs -->
@@ -494,6 +543,25 @@
                 <p>9 members · reading a shared poetry set</p>
               </span>
             </button>
+          </div>
+
+          <!-- Library -->
+          <div class="pane" data-scope="reader" data-pane="library" hidden>
+            <p class="lede" style="font-size:.82rem; margin-bottom:1rem;">Kitabo Circles' own lending shelf — free to rent with any subscription, print copies only.</p>
+            <h4 style="font-size:.85rem;">My rentals</h4>
+            <div class="card" style="margin-bottom:1.1rem;">
+              <span class="badge b-secondary">Due Oct 20</span>
+              <h5 style="margin:.5rem 0 .2rem; font-size:.9rem;">Kintu — Jennifer Nansubuga Makumbi</h5>
+              <div class="btn-row"><button class="btn btn-outline btn-sm">Renew</button><button class="btn btn-outline btn-sm">Return</button></div>
+            </div>
+            <h4 style="font-size:.85rem;">Available to rent</h4>
+            <div class="table-wrap"><table style="min-width:0;">
+              <tr><td>The First Woman</td><td style="white-space:nowrap;"><span class="badge b-secondary">Available</span></td></tr>
+              <tr><td>Tropical Fish: Tales from Entebbe</td><td style="white-space:nowrap;"><span class="badge b-secondary">Available</span></td></tr>
+              <tr><td>Waiting</td><td style="white-space:nowrap;"><span class="badge b-accent">2 on waitlist</span></td></tr>
+              <tr><td>Secrets No More</td><td style="white-space:nowrap;"><span class="badge b-secondary">Available</span></td></tr>
+            </table></div>
+            <button class="btn btn-primary btn-block" style="margin-top:1rem;">Rent a book</button>
           </div>
 
           <!-- Profile -->
@@ -522,6 +590,7 @@
           <button class="pane-btn" data-scope="reader" data-pane="discover" aria-selected="true" onclick="setPane('reader','discover'); document.getElementById('reader-title').textContent='Discover';"><span class="dot"></span>Discover</button>
           <button class="pane-btn" data-scope="reader" data-pane="myreading" aria-selected="false" onclick="setPane('reader','myreading'); document.getElementById('reader-title').textContent='My Reading';"><span class="dot"></span>My Reading</button>
           <button class="pane-btn" data-scope="reader" data-pane="clubs" aria-selected="false" onclick="setPane('reader','clubs'); document.getElementById('reader-title').textContent='My Clubs';"><span class="dot"></span>Clubs</button>
+          <button class="pane-btn" data-scope="reader" data-pane="library" aria-selected="false" onclick="setPane('reader','library'); document.getElementById('reader-title').textContent='Library';"><span class="dot"></span>Library</button>
           <button class="pane-btn" data-scope="reader" data-pane="profile" aria-selected="false" onclick="setPane('reader','profile'); document.getElementById('reader-title').textContent='Profile';"><span class="dot"></span>Profile</button>
         </div>
       </div>
@@ -599,7 +668,39 @@
               <span class="badge b-secondary">Now reading</span>
               <h4 style="margin:.6rem 0 .3rem; font-size:1rem;">Kintu</h4>
               <span style="font-size:.76rem; color:var(--ink-soft);">14 of 18 members on ch. 5 or later</span>
+              <p style="font-size:.82rem; margin:.6rem 0 0;">A curse laid on a Buganda clan head in 1750 ripples through six of his descendants in the present day — a sprawling family saga that doubles as a history of Uganda itself.</p>
             </div>
+
+            <h4 style="font-size:.85rem;">Member reviews</h4>
+            <div id="review-list" style="margin-bottom:.8rem;">
+              <div class="card" style="margin-bottom:.6rem; padding:.7rem .8rem;">
+                <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                  <span style="font-weight:800; font-size:.8rem;">Mirembe O.</span>
+                  <span style="color:var(--accent); font-size:.78rem;">★★★★★</span>
+                </div>
+                <p style="font-size:.8rem; margin:.3rem 0 0;">The kind of book that makes you call your grandmother afterwards. Slow start, unforgettable back half.</p>
+              </div>
+              <div class="card" style="margin-bottom:.6rem; padding:.7rem .8rem;">
+                <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                  <span style="font-weight:800; font-size:.8rem;">Julius B.</span>
+                  <span style="color:var(--accent); font-size:.78rem;">★★★★☆</span>
+                </div>
+                <p style="font-size:.8rem; margin:.3rem 0 0;">Dense in places but worth the patience — chapter 6 alone is worth the whole book.</p>
+              </div>
+            </div>
+            <div class="card" style="margin-bottom:1.2rem;">
+              <p style="font-size:.78rem; font-weight:700; margin-bottom:.4rem;">Add your review</p>
+              <div class="btn-row" id="star-picker" style="margin-bottom:.5rem;">
+                <button class="btn btn-outline btn-sm" onclick="setStars(1)" data-star="1">★</button>
+                <button class="btn btn-outline btn-sm" onclick="setStars(2)" data-star="2">★★</button>
+                <button class="btn btn-outline btn-sm" onclick="setStars(3)" data-star="3">★★★</button>
+                <button class="btn btn-outline btn-sm" onclick="setStars(4)" data-star="4">★★★★</button>
+                <button class="btn btn-outline btn-sm" onclick="setStars(5)" data-star="5">★★★★★</button>
+              </div>
+              <div class="field" style="margin-bottom:.5rem;"><textarea id="review-text" placeholder="What did you think so far?" style="min-height:3em;"></textarea></div>
+              <button class="btn btn-primary btn-sm" onclick="postReview()">Post review</button>
+            </div>
+
             <h4 style="font-size:.85rem;">Vote: next book</h4>
             <div style="margin-bottom:.6rem;"><div class="bar-row"><span style="font-size:.82rem; width:9.5rem;">The First Woman</span><div class="bar"><span style="width:78%;"></span></div><span class="bar-label">14</span></div></div>
             <div style="margin-bottom:1rem;"><div class="bar-row"><span style="font-size:.82rem; width:9.5rem;">Tropical Fish</span><div class="bar b-sec"><span style="width:22%;"></span></div><span class="bar-label">4</span></div></div>
@@ -1284,6 +1385,101 @@
     selectedLibFile = null;
     document.getElementById('lib-file-preview').hidden = true;
     document.getElementById('lib-file-label').textContent = 'Click to choose a PDF, EPUB, or cover image';
+  }
+
+  function addNote() {
+    var text = document.getElementById('note-input').value.trim();
+    if (!text) return;
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.style.padding = '.6rem .8rem';
+    card.style.marginBottom = '.5rem';
+    var when = document.createElement('p');
+    when.style.fontSize = '.68rem';
+    when.style.color = 'var(--ink-soft)';
+    when.style.margin = '0 0 .2rem';
+    when.textContent = 'Just now';
+    var body = document.createElement('p');
+    body.style.fontSize = '.82rem';
+    body.style.margin = '0';
+    body.textContent = text;
+    card.appendChild(when);
+    card.appendChild(body);
+    document.getElementById('note-list').prepend(card);
+    document.getElementById('note-input').value = '';
+  }
+
+  var BOOKS = {
+    'kintu': { title: 'Kintu', author: 'Jennifer Nansubuga Makumbi', blurb: 'A curse laid on a Buganda clan head in 1750 ripples through six of his descendants in the present day — a sprawling family saga that doubles as a history of Uganda itself.', price: 'UGX 42,000', rentable: true },
+    'first-woman': { title: 'The First Woman', author: 'Jennifer Nansubuga Makumbi', blurb: 'Kirabo grows up in 1970s Uganda haunted by the mother who left her — and by a fierce, forgotten history of women pushed out of the stories told about their own country.', price: 'UGX 48,000', rentable: true },
+    'tropical-fish': { title: 'Tropical Fish: Tales from Entebbe', author: 'Doreen Baingana', blurb: 'Three linked stories follow one Ugandan family across decades and continents, tracing a girl into womanhood against the backdrop of Entebbe, Los Angeles, and everywhere in between.', price: 'UGX 39,000', rentable: true },
+    'waiting': { title: 'Waiting', author: 'Goretti Kyomuhendo', blurb: 'A thirteen-year-old girl and her family wait out the final days of Idi Amin’s regime in a village on the edge of war — a quiet, devastating novel about ordinary life under extraordinary pressure.', price: 'UGX 36,000', rentable: false },
+    'secrets-no-more': { title: 'Secrets No More', author: 'Goretti Kyomuhendo', blurb: 'A missing-persons case in Kampala unravels into a story about the secrets families keep from each other, and from themselves.', price: 'UGX 35,000', rentable: true }
+  };
+
+  function showBookDetail(key) {
+    var b = BOOKS[key];
+    if (!b) return;
+    document.getElementById('bd-title').textContent = b.title;
+    document.getElementById('bd-author').textContent = b.author;
+    document.getElementById('bd-blurb').textContent = b.blurb;
+    document.getElementById('bd-buy').textContent = 'Buy · ' + b.price;
+    var rent = document.getElementById('bd-rent');
+    rent.textContent = b.rentable ? 'Available to rent from Kitabo Circles' : 'Currently on loan — join the waitlist';
+    rent.className = 'badge ' + (b.rentable ? 'b-secondary' : 'b-accent');
+    var detail = document.getElementById('book-detail');
+    detail.hidden = false;
+    detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function publishStory() {
+    var title = document.getElementById('story-title').value.trim();
+    var body = document.getElementById('story-body').value.trim();
+    if (!title || !body) return;
+    var excerpt = body.length > 90 ? body.slice(0, 90) + '…' : body;
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.style.marginBottom = '.6rem';
+    card.innerHTML = '<span class="badge b-primary">Published by you</span>'
+      + '<h5 style="margin:.4rem 0 .2rem; font-size:.85rem;"></h5>'
+      + '<p style="font-size:.78rem; color:var(--ink-soft); margin:0;"></p>';
+    card.querySelector('h5').textContent = title;
+    card.querySelector('p').textContent = excerpt;
+    document.getElementById('story-list').prepend(card);
+
+    var shelfCard = card.cloneNode(true);
+    document.getElementById('community-shelf-list').prepend(shelfCard);
+
+    document.getElementById('story-title').value = '';
+    document.getElementById('story-body').value = '';
+  }
+
+  var selectedStars = 0;
+  function setStars(n) {
+    selectedStars = n;
+    document.querySelectorAll('#star-picker button').forEach(function (b) {
+      b.classList.toggle('btn-primary', Number(b.dataset.star) === n);
+      b.classList.toggle('btn-outline', Number(b.dataset.star) !== n);
+    });
+  }
+
+  function postReview() {
+    var text = document.getElementById('review-text').value.trim();
+    if (!text || !selectedStars) return;
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.style.marginBottom = '.6rem';
+    card.style.padding = '.7rem .8rem';
+    var stars = '★'.repeat(selectedStars) + '☆'.repeat(5 - selectedStars);
+    card.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:baseline;">'
+      + '<span style="font-weight:800; font-size:.8rem;">You</span>'
+      + '<span style="color:var(--accent); font-size:.78rem;"></span></div>'
+      + '<p style="font-size:.8rem; margin:.3rem 0 0;"></p>';
+    card.querySelector('span[style*="color"]').textContent = stars;
+    card.querySelector('p').textContent = text;
+    document.getElementById('review-list').prepend(card);
+    document.getElementById('review-text').value = '';
+    setStars(0);
   }
 
   function pickPrompt(type, credits) {
